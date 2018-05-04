@@ -15,7 +15,7 @@ class Interfaz:
 		self.cantidad_items()
 		self.manzana=pygame.image.load('pix/manzana.png')
 		self.caballob=pygame.image.load('pix/blanco.png')
-		self.caballon=pygame.image.load('pix/negro.png')			
+		self.caballon=pygame.image.load('pix/negro.png')		
 
 	def cantidad_items(self):
 		while int(self.num_items)%2==0:
@@ -65,7 +65,9 @@ class Interfaz:
 		#Pinta el menu ppal
 		b_start = pygame.Rect(410,300,100,30)
 		b_reset = pygame.Rect(550,300,100,30)
+
 		self.menu_principal(b_start,b_reset)
+
 
 		while True:
 			
@@ -74,13 +76,17 @@ class Interfaz:
 					pygame.quit()
 					sys.exit()
 			if evento.type == pygame.MOUSEBUTTONDOWN:
-
 				mouse_pos = evento.pos  # gets mouse position
 
 				if b_start.collidepoint(mouse_pos):
-					partida=Partida(self)
+					partida=Partida(self)		
+					break
+
 
 			pygame.display.update()
+
+		partida.start()
+
 
 	#Crea una lista para las posiciones iniciales
 	def coordenadas_aleatorias(self,cant_items):
@@ -147,6 +153,5 @@ class Interfaz:
 		text_br=font.render("Reiniciar", True, (0, 0, 0))
 		pygame.draw.rect(self.ventana, [170, 170, 170], b_r)
 		self.ventana.blit(text_br,(562,305))
-
-	
-		
+		#-----------------------------------------------------
+		pygame.display.update()
