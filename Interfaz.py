@@ -148,51 +148,5 @@ class Interfaz:
 		pygame.draw.rect(self.ventana, [170, 170, 170], b_r)
 		self.ventana.blit(text_br,(562,305))
 
-		"""
-		#Busqueda No Informada
-		subtitle1 = font.render("Busqueda No Informada", True, (170, 170, 170))
-		ventana.blit(subtitle1,(650+(subtitle1.get_width()/6),160))
-		#Botones
-		font = pygame.font.SysFont("comicsansms", 20)
-		text_b1=font.render("Amplitud", True, (0, 0, 0))
-		text_b2=font.render("Costo U.", True, (0, 0, 0))
-		text_b3=font.render("Profundidad", True, (0, 0, 0))
-		pygame.draw.rect(ventana, [170, 170, 170], b_1)
-		pygame.draw.rect(ventana, [170, 170, 170], b_2)
-		pygame.draw.rect(ventana, [170, 170, 170], b_3)
-		ventana.blit(text_b1,(645+(text_b1.get_width()/3),207))
-		ventana.blit(text_b2,(755+(text_b2.get_width()/3),207))
-		ventana.blit(text_b3,(860+(text_b3.get_width()/6),207))
-		#------------------------------------------------------
-		#Busqueda Informada
-		font = pygame.font.SysFont("comicsansms", 30)
-		subtitle2 = font.render("Busqueda Informada", True, (170, 170, 170))
-		ventana.blit(subtitle2,(650+(subtitle2.get_width()/4),250))
-		#Botones
-		font = pygame.font.SysFont("comicsansms", 20)
-		text_b4=font.render("Avara", True, (0, 0, 0))
-		text_b5=font.render("A*", True, (0, 0, 0))
-		pygame.draw.rect(ventana, [170, 170, 170], b_4)
-		pygame.draw.rect(ventana, [170, 170, 170], b_5)
-		ventana.blit(text_b4,(720,288))
-		ventana.blit(text_b5,(840,288))
-		#------------------------------------------------------
-		#Informes de Busqueda
-		font = pygame.font.SysFont("comicsansms", 40)
-		subtitle3 = font.render("Resumen", True, (170, 170, 170))
-		ventana.blit(subtitle3,(650+(subtitle3.get_width()/1.5),320))
-		font = pygame.font.SysFont("comicsansms", 20)
-		subtitle4=font.render("# Nodos Expandidos:", True, (170, 170, 170))
-		subtitle5=font.render("Profundidad del arbol:", True, (170, 170, 170))
-		subtitle6=font.render("Tiempo de Ejecucion:", True, (170, 170, 170))
-		ventana.blit(subtitle4,(660,360))
-		ventana.blit(subtitle5,(660,420))
-		ventana.blit(subtitle6,(660,480))
-		#Boton de reset Interfaz
-		text_b6=font.render("Reset", True, (0, 0, 0))
-		text_b7=font.render("Cambiar Entrada", True, (0, 0, 0))
-		pygame.draw.rect(ventana, [170, 170, 170], b_6)
-		pygame.draw.rect(ventana, [170, 170, 170], b_7)
-		ventana.blit(text_b6,(780,557))
-		ventana.blit(text_b7,(878,557))
-		"""
+	
+		
