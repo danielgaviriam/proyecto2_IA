@@ -107,6 +107,29 @@ class Interfaz:
 				self.pos_cn=coord_cn
 
 	def pintar_escenario(self):
+		color=(160,160,160)#gris
+		fondo=(255,255,255)#blanco
+		colorDos=pygame.Color(224,224,224)#blanco
+		#dimensiones para la grilla
+		largo=60
+		alto=60
+		x=0
+		y=0
+
+		i=0
+		for fila in range(0,6):
+			for columna in range(0,6):
+				if i%2==0:
+					pygame.draw.rect(self.ventana, color, (x,y,alto,largo))	
+				else:
+					pygame.draw.rect(self.ventana, colorDos, (x,y,alto,largo))	
+					
+				i=i+1
+				x=x+60
+			i=i+1
+			y=y+60
+			x=0
+
 		#Pintar Manzanas y caballos
 		for pos in self.manzanas:
 			self.ventana.blit(self.manzana,( int(pos[0])*60 , int(pos[1])*60 ))
