@@ -14,7 +14,7 @@ class Partida:
 		self.user_items=[]
 		self.pc_items=[]
 		#Variable global para manejar los turnos durante el juego
-		self.turno=True
+		self.turno=False
 		#Funcion utilizada para pintar en la pantalla una flecha que indica quien esta jugando(a quien le toca)
 		self.actualizar_turno()
 
@@ -219,7 +219,8 @@ class Partida:
 		x_n=450
 		y_n=150
 		x_b=450
-		y_b=195
+		y_b=190
+		
 		for pos in self.user_items:
 			self.interfaz.ventana.blit(manzana_m,( x_n , y_n))
 			x_n=x_n+30
