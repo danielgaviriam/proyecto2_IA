@@ -138,13 +138,18 @@ class Partida:
 
 	#Recorre el array de posibilidades y crea un boton por cada una (esto solo para el usuario)
 	def crear_botones_player(self, posibilidades):
-		#transparent= pygame.Color(0, 0, 0, 0)#transparente
+		marco= turnero=pygame.image.load('pix/marco.png')
 
 		#self.interfaz.b1
 		i=1
 		for pos in posibilidades:
 			self.create_buttons(i,pos[0],pos[1])
 			i=i+1
+
+		#pinta el tablero encima de los botones para que no se vean
+		self.interfaz.pintar_escenario()
+		for pos in posibilidades:
+			self.interfaz.ventana.blit(marco,(int(pos[0])*60 , int(pos[1])*60))
 
 		pygame.display.update()	
 		
