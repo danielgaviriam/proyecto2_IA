@@ -17,6 +17,8 @@ class Interfaz:
 		self.caballob=pygame.image.load('pix/blanco.png')
 		self.caballon=pygame.image.load('pix/negro.png')		
 
+	#Funcion que se encarga de recibir por terminal la cantidad de items, con ese valor
+	#llama a la funcion que crea las posiciones aleatoriamente para manzanas y caballos
 	def cantidad_items(self):
 		while int(self.num_items)%2==0:
 			self.num_items = raw_input("Numero de items(impar): ")
@@ -77,18 +79,18 @@ class Interfaz:
 					sys.exit()
 			if evento.type == pygame.MOUSEBUTTONDOWN:
 				mouse_pos = evento.pos  # gets mouse position
-
+				#Cuando se da click en el boton start se detiene este while y se inicial un objeto Partida
 				if b_start.collidepoint(mouse_pos):
 					partida=Partida(self)		
 					break
 
 
 			pygame.display.update()
-
+		#Inicia el juego..
 		partida.start()
 
 
-	#Crea una lista para las posiciones iniciales
+	#Construye el array con las posiciones de las manzanas y asigna valos a las posiciones de los caballos (Aleatoriamente)
 	def coordenadas_aleatorias(self,cant_items):
 
 		while len(self.manzanas)<int(cant_items):
@@ -106,6 +108,8 @@ class Interfaz:
 				self.pos_cb=coord_cb
 				self.pos_cn=coord_cn
 
+	#Pintar el escenario, teniento en cuenta la cantidad de manzanas que hayan sin coger
+	#y las posiciones de los caballos
 	def pintar_escenario(self):
 		color=(160,160,160)#gris
 		fondo=(255,255,255)#blanco
@@ -137,7 +141,7 @@ class Interfaz:
 		self.ventana.blit(self.caballob,( int(self.pos_cb[0])*60 , int(self.pos_cb[1])*60 ))
 		self.ventana.blit(self.caballon,( int(self.pos_cn[0])*60 , int(self.pos_cn[1])*60 ))
 
-
+	#Pinta los botones y la informacion del menu principal
 	def menu_principal(self,b_s,b_r):
 		#Cargar Imagenes
 		self.manzanam=pygame.image.load('pix/manzana_m.png')

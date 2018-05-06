@@ -8,13 +8,18 @@ from random import randint
 class Partida:
 
 	def __init__(self,intefaz):
+		#Tipo interfaz,
 		self.interfaz=intefaz
+		#Lista que tendra la cantidad de manzanas que tomen el usuario y el pc
 		self.user_items=[]
 		self.pc_items=[]
-		#False:PC,True:Human
+		#Variable global para manejar los turnos durante el juego
 		self.turno=True
-		#self.start()
-		#Botones de movimiento
+		#Funcion utilizada para pintar en la pantalla una flecha que indica quien esta jugando(a quien le toca)
+		self.actualizar_turno()
+
+		#Botones de movimiento para el usuario, estas se pintan en una posicion no visible inicialmente
+		#luego son movimos hacia las opciones de jugada del usuario en cada turno
 		self.b1=pygame.Rect(800,800,60,60)
 		self.b2=pygame.Rect(800,800,60,60)
 		self.b3=pygame.Rect(800,800,60,60)
@@ -25,11 +30,15 @@ class Partida:
 		self.b8=pygame.Rect(800,800,60,60)
 
 	def start(self):
-		self.actualizar_turno()
-		while self.interfaz.manzanas!=[]:
+
+		while True:
 			
+			#Evalua si el juego Termino
+			if self.interfaz.manzanas==[]:
+				self.pintar_ganador()
+
 			#Eventos de tablero
-			if self.turno==True:	
+			elif self.turno==True:	
 				pos=self.next(self.interfaz.pos_cn)
 				self.crear_botones_player(pos)
 
@@ -47,7 +56,7 @@ class Partida:
 				if evento.type == pygame.MOUSEBUTTONDOWN:
 			
 					mouse_pos = evento.pos  # gets mouse position
-			
+					#Cuando un usuario selecciona una opcion envia la coordenada que selecciono el jugador
 					if self.b1.collidepoint(mouse_pos):
 						self.moves([int(self.b1.x/60),int(self.b1.y/60)],1)
 					if self.b2.collidepoint(mouse_pos):
@@ -66,7 +75,7 @@ class Partida:
 						self.moves([int(self.b8.x/60),int(self.b8.y/60)],1)
 
 
-	#evalua que no caigan en la posicion del otro jugador
+	#Evita que ambos caballos no caigan en la misma posicion
 	def misma_posicion(self,x,y):
 		if self.turno==True:
 			if int(x)==int(self.interfaz.pos_cb[0]) and int(y)==int(self.interfaz.pos_cb[1]):
@@ -78,7 +87,9 @@ class Partida:
 		return True
 
 
-	#Posibles Jugadas que tendra el jugador de acuerdo a su posicion
+	#Posibles Jugadas que tendra quien se encuentre jugando, es decir
+	#Recibe como parametro la posicion del caballo negro o blanco
+	#Retornar un array con las coordenadas de posibles opciones que tiene segun la posicion
 	def next(self,pos_gamer):
 		posibilidades=[]
 		x=int(pos_gamer[0])
@@ -112,6 +123,7 @@ class Partida:
 
 		return posibilidades
 
+	#Funcion utilizada para pintar en la pantalla una flecha que indica quien esta jugando(a quien le toca)
 	def actualizar_turno(self):
 		turnero=pygame.image.load('pix/flecha.png')
 		capa=pygame.image.load('pix/capa.jpg')
@@ -124,8 +136,7 @@ class Partida:
 
 		pygame.display.update()
 
-
-	#adiciona botones en aquellas casillas que el se pueda mover
+	#Recorre el array de posibilidades y crea un boton por cada una (esto solo para el usuario)
 	def crear_botones_player(self, posibilidades):
 		#transparent= pygame.Color(0, 0, 0, 0)#transparente
 
@@ -137,7 +148,8 @@ class Partida:
 
 		pygame.display.update()	
 		
-			
+	#Pinta los botones que muestran al usuario sus opciones
+	#CORREGIR: Los botones deben ser transparentes... para que no tape la interfaz (NO SUPE XD)
 	def create_buttons(self,id_button,x,y):
 		color=Color(255,255,255,127)
 		if id_button==1:
@@ -165,7 +177,8 @@ class Partida:
 			self.b8=pygame.Rect((x*60),(y*60),60,60)
 			pygame.draw.rect(self.interfaz.ventana, color, self.b8)
 
-	#Actualiza es estado del escenario y evalua si tomo o no una manzana
+	#Recibe como parametro una coordenada que sera aquella que escogio el usuario o el pc y una
+	#variable booleana que permite saber de quien es el movimiento (user=1)(pc=0)
 	def moves(self,coord,turn):
 		#si tomo una manzana
 		if coord in self.interfaz.manzanas:
@@ -194,7 +207,8 @@ class Partida:
 
 		self.actualizar_turno()
 
-
+	#Se encarga de actualizar el marcador segun la cantidad de items que tengan los array que cuentan la cantidad
+	#de manzanas que tiene cada jugador
 	def update_marker(self):
 		manzana_m=pygame.image.load('pix/manzana_m.png')
 		x_n=450
@@ -210,7 +224,24 @@ class Partida:
 			x_b=x_b+30
 
 	#Funcion temporal, es para que la CPU escoja una opcion aleatoria entre sus opciones
+	#Esta sera la que construya el arbol y retorne la mejor eleccion
 	def move_pc(self,posibilidades):
 		sel=randint(0, len(posibilidades)-1)
 		self.moves(posibilidades[sel],0)
+
+	def pintar_ganador(self):
+		capa=pygame.image.load('pix/capa.jpg')
+		self.interfaz.ventana.blit(capa,( 370 , 155))
+		self.interfaz.ventana.blit(capa,( 370 , 195))
+		#Ganador
+		font = pygame.font.SysFont("comicsansms", 30)
+		if len(self.user_items)>len(self.pc_items):
+			ganador = font.render("Gano Usuario", True, (107, 107, 107))
+
+		else:
+			ganador = font.render("Gano IA, Llorelo papa", True, (107, 107, 107))
+		
+		self.interfaz.ventana.blit(ganador,(470,250))
+		pygame.display.update()
+
 
