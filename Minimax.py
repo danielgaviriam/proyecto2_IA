@@ -42,6 +42,7 @@ class Minimax:
 			n.pos_cb=[x,y]
 			n.pos_cn=nodo_padre.pos_cn
 
+		#print nodo_padre.manzanas_disponibles,"hola"
 		if [x,y] in nodo_padre.manzanas_disponibles:
 				manzanas=nodo_padre.manzanas_disponibles.remove([x,y])
 				n.manzanas_disponibles=manzanas
@@ -70,6 +71,7 @@ class Minimax:
 		else:
 			posibilidades=self.partida.next([nodo.pos_cb[0],nodo.pos_cb[1]])
 
+		print posibilidades,"hola"
 		for pos in posibilidades:
 			nodos.append(self.crear_nodo(pos[0],pos[1],nodo))
 
@@ -81,8 +83,9 @@ class Minimax:
 		i=0
 		while True:
 			#print len(self.partida.interfaz.manzanas),"|hola"
-			#if i==200:
-			if self.lista_nodos[0].manzanas_disponibles==[]:
+			
+			#if self.lista_nodos[0].manzanas_disponibles==[]:
+			if i==1:
 				print "termino"
 				break
 
@@ -99,7 +102,7 @@ class Minimax:
 			#eliminarlo de la lista a recorrer
 			self.lista_nodos.pop(0)
 
-			#i=i+1
+			i=i+1
 
 		self.resumen_mini_max()
 

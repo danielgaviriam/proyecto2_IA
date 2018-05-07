@@ -44,11 +44,11 @@ class Partida:
 				self.crear_botones_player(pos)
 
 			elif self.turno==False:
-				#minimax=Minimax(self)
-				#minimax.calcular()
-				#self.turno=True
-				pos=self.next(self.interfaz.pos_cb)
-				self.move_pc(pos)
+				minimax=Minimax(self)
+				minimax.calcular()
+				self.turno=True
+				#pos=self.next(self.interfaz.pos_cb)
+				#self.move_pc(pos)
 
 			for evento in pygame.event.get():
 
