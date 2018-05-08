@@ -7,6 +7,8 @@ from Partida import *
 
 class Interfaz:
 
+	copy_manzanas=[]
+
 	def __init__(self):
 		self.manzanas=[]
 		self.pos_cb=[]
@@ -108,6 +110,8 @@ class Interfaz:
 			if coord_cb not in self.manzanas and coord_cn not in self.manzanas and coord_cb != coord_cn:
 				self.pos_cb=coord_cb
 				self.pos_cn=coord_cn
+
+		copy_manzanas=self.manzanas
 
 	#Pintar el escenario, teniento en cuenta la cantidad de manzanas que hayan sin coger
 	#y las posiciones de los caballos

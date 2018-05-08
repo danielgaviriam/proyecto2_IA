@@ -1,4 +1,5 @@
 import sys
+import copy
 import pygame
 import time as t
 from pygame.locals import *
@@ -44,9 +45,12 @@ class Partida:
 				self.crear_botones_player(pos)
 
 			elif self.turno==False:
+				print "hola1",self.interfaz.copy_manzanas
 				minimax=Minimax(self)
 				minimax.calcular()
 				self.turno=True
+
+				#aleatorio
 				#pos=self.next(self.interfaz.pos_cb)
 				#self.move_pc(pos)
 

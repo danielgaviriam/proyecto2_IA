@@ -71,7 +71,7 @@ class Minimax:
 		else:
 			posibilidades=self.partida.next([nodo.pos_cb[0],nodo.pos_cb[1]])
 
-		print posibilidades,"hola"
+		#print posibilidades,"hola"
 		for pos in posibilidades:
 			nodos.append(self.crear_nodo(pos[0],pos[1],nodo))
 
