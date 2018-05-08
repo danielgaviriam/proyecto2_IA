@@ -86,21 +86,24 @@ class Minimax:
 		self.crear_nodo_inicial()
 		i=0
 		while True:
+			#si temina
 			if self.lista_nodos==[]:
 				break		
 
 			#condicion de parada porque no para por las otras XD
 			#if i==100:
 			#	break
+
+			#si encuentra una hoja
 			if self.lista_nodos[0].manzanas_disponibles==None:
 				self.lista_nodos[0].utilidad=len(self.lista_nodos[0].user_items)-len(self.lista_nodos[0].pc_items)
 				self.nodos_expandidos.append(self.lista_nodos[0])
 				self.lista_nodos.pop(0)
 
-
-			print "nodo a expandir",self.lista_nodos[0].x," ",self.lista_nodos[0].y
-			expandidos=[]
-			if self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
+			#Evalua si es un ciclo, sino lo es, lo expande
+			elif self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
+				print "nodo a expandir",self.lista_nodos[0].x," ",self.lista_nodos[0].y
+				expandidos=[]
 				expandidos=self.expandir_nodo(self.lista_nodos[0])
 				for nodo in expandidos:
 					#agrega cada nodo hijo al final de la lista
@@ -109,6 +112,7 @@ class Minimax:
 				self.nodos_expandidos.append(self.lista_nodos[0])
 				#eliminarlo de la lista a recorrer
 				self.lista_nodos.pop(0)
+			#es un ciclo, lo borra, sin expandir
 			else:
 				self.lista_nodos.pop(0)
 
