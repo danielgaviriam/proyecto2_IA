@@ -5,6 +5,7 @@ import time as t
 from pygame.locals import *
 from random import randint
 from Minimax import *
+from copy import copy, deepcopy
 
 
 class Partida:
@@ -45,9 +46,8 @@ class Partida:
 				self.crear_botones_player(pos)
 
 			elif self.turno==False:
-				print "hola1",self.interfaz.copy_manzanas
-				minimax=Minimax(self)
-				minimax.calcular()
+				copia=deepcopy(self)
+				minimax=Minimax(copia)
 				self.turno=True
 
 				#aleatorio
