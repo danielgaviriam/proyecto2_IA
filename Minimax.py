@@ -1,6 +1,7 @@
 from Nodo import *
 import sys
 from math import *
+from copy import copy, deepcopy
 
 class Minimax:
 
@@ -66,17 +67,17 @@ class Minimax:
 
 	def expandir_nodo(self,nodo):
 		nodos=[]
+		#Evitar referencia
+		nodo_copia=deepcopy(nodo)
 		#evitar que expanda nodos hoja
 		if nodo.manzanas_disponibles!=None:
-			if nodo.type==False:
-				posibilidades=self.partida.next([nodo.pos_cb[0],nodo.pos_cb[1]])
-				for pos in posibilidades:
-					nodos.append(self.crear_nodo(pos[0],pos[1],nodo))
+			if nodo_copia.type==False:
+				posibilidades=self.partida.next([nodo_copia.pos_cb[0],nodo_copia.pos_cb[1]])
 			else:
-				posibilidades=self.partida.next([nodo.pos_cn[0],nodo.pos_cn[1]])
+				posibilidades=self.partida.next([nodo_copia.pos_cn[0],nodo_copia.pos_cn[1]])
 			
 			for pos in posibilidades:
-				nodos.append(self.crear_nodo(pos[0],pos[1],nodo))
+				nodos.append(self.crear_nodo(pos[0],pos[1],nodo_copia))
 
 		return nodos
 
@@ -87,6 +88,10 @@ class Minimax:
 		while True:
 			if self.lista_nodos==[]:
 				break		
+
+			#condicion de parada porque no para por las otras XD
+			#if i==100:
+			#	break
 			if self.lista_nodos[0].manzanas_disponibles==None:
 				self.lista_nodos[0].utilidad=len(self.lista_nodos[0].user_items)-len(self.lista_nodos[0].pc_items)
 				self.nodos_expandidos.append(self.lista_nodos[0])
@@ -111,6 +116,7 @@ class Minimax:
 
 		self.salida()
 		#self.resumen_mini_max()
+		self.print_nodo(self.nodos_expandidos[0])
 
 	def salida(self):
 		print "utilidades nodos_hoja"
@@ -128,8 +134,21 @@ class Minimax:
 	def resumen_mini_max(self):
 		print "ptes"
 		print len(self.lista_nodos)
+		
 		print "expandidos"
 		print len(self.nodos_expandidos)
+		for nodo in self.nodos_expandidos:
+			print "coord_x ",nodo.x
+			print "coord_y ",nodo.y
+			print "prof ",nodo.profundidad
+			print "manz ",nodo.manzanas_disponibles
+			print "user ",nodo.user_items
+			print "pc ",nodo.pc_items
+			print "type ",nodo.type
+			print "pos_user ",nodo.pos_cn
+			print "pos_pc ",nodo.pos_cb
+			print type(nodo.padre)
+			print "--------------------"
 
 	def print_nodo(self,nodo):
 		print "coord_x ",nodo.x
