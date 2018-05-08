@@ -87,9 +87,6 @@ class Minimax:
 		while True:
 			if self.lista_nodos==[]:
 				break		
-			if i==2000:
-				break
-
 			if self.lista_nodos[0].manzanas_disponibles==None:
 				self.lista_nodos[0].utilidad=len(self.lista_nodos[0].user_items)-len(self.lista_nodos[0].pc_items)
 				self.nodos_expandidos.append(self.lista_nodos[0])
@@ -133,33 +130,6 @@ class Minimax:
 		print len(self.lista_nodos)
 		print "expandidos"
 		print len(self.nodos_expandidos)
-		"""
-		for nodo in self.lista_nodos:
-			print "coord_x ",nodo.x
-			print "coord_y ",nodo.y
-			print "prof ",nodo.profundidad
-			print "manz ",nodo.manzanas_disponibles
-			print "user ",nodo.user_items
-			print "pc ",nodo.pc_items
-			print "type ",nodo.type
-			print "pos_user ",nodo.pos_cn
-			print "pos_pc ",nodo.pos_cb
-			print type(nodo.padre)
-			print "--------------------"
-		print "Expandidos"
-		for nodo in self.nodos_expandidos:
-			print "coord_x ",nodo.x
-			print "coord_y ",nodo.y
-			print "prof ",nodo.profundidad
-			print "manz ",nodo.manzanas_disponibles
-			print "user ",nodo.user_items
-			print "pc ",nodo.pc_items
-			print "type ",nodo.type
-			print "pos_user ",nodo.pos_cn
-			print "pos_pc ",nodo.pos_cb
-			print type(nodo.padre)
-			print "--------------------"
-		"""
 
 	def print_nodo(self,nodo):
 		print "coord_x ",nodo.x
@@ -178,12 +148,12 @@ class Minimax:
 	def nodo_fue_expandido(self,nodo_padre,nodo_a_verificar):
 		#llego a la raiz
 		if isinstance(nodo_padre, int) is True:
-			#print "expande es el nodo raiz"
+			print "expande es el nodo raiz"
 			return False
 		#si es igual a algun nodo padre 
-		elif nodo_a_verificar.x == nodo_padre.x and nodo_a_verificar.y == nodo_padre.y and nodo_a_verificar.manzanas_disponibles == nodo_padre.manzanas_disponibles and nodo_padre.user_items==nodo_a_verificar.user_items and nodo_padre.pc_items==nodo_a_verificar.pc_items:
-			#print "ya se ha expandido no expande"
+		elif nodo_a_verificar.pos_cb == nodo_padre.pos_cb and nodo_a_verificar.pos_cn == nodo_padre.pos_cn and nodo_a_verificar.manzanas_disponibles == nodo_padre.manzanas_disponibles and nodo_padre.user_items==nodo_a_verificar.user_items and nodo_padre.pc_items==nodo_a_verificar.pc_items:
+			print "ya se ha expandido no expande"
 			return True
 		else:
-			#print "ciclo"
+			print "ciclo"
 			return self.nodo_fue_expandido(nodo_padre.padre,nodo_a_verificar)
