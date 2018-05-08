@@ -36,28 +36,31 @@ class Minimax:
 		if nodo_padre.type==False:
 			n.type=True
 			n.utilidad=float("inf")
-			n.pos_cn=[x,y]
-			n.pos_cb=nodo_padre.pos_cb
+			n.pos_cb=[x,y]
+			n.pos_cn=nodo_padre.pos_cn
 		else:
 			n.type=False
 			n.utilidad=-1 * float("inf")
-			n.pos_cb=[x,y]
-			n.pos_cn=nodo_padre.pos_cn
+			n.pos_cn=[x,y]
+			n.pos_cb=nodo_padre.pos_cb
 
 		if [x,y] in nodo_padre.manzanas_disponibles:
-				manzanas=nodo_padre.manzanas_disponibles.remove([x,y])
-				n.manzanas_disponibles=manzanas
+			print "tomo manzana!!!----",[x,y],"------",nodo_padre.manzanas_disponibles
 
-				if nodo_padre.type==False:
-					items_user=nodo_padre.user_items
-					items_user.append([x,y])
-					n.user_items=items_user
-					n.pc_items=nodo_padre.pc_items
-				else:
-					items_pc=nodo_padre.pc_items
-					items_pc.append([x,y])
-					n.pc_items=items_pc
-					n.user_items=nodo_padre.user_items
+			manzanas=nodo_padre.manzanas_disponibles.remove([x,y])
+			n.manzanas_disponibles=manzanas
+
+			if nodo_padre.type==False:
+				items_pc=nodo_padre.pc_items
+				items_pc.append([x,y])
+				n.pc_items=items_pc
+				n.user_items=nodo_padre.user_items
+			else:
+				items_user=nodo_padre.user_items
+				items_user.append([x,y])
+				n.user_items=items_user
+				n.pc_items=nodo_padre.pc_items
+					
 		else:
 			n.manzanas_disponibles=nodo_padre.manzanas_disponibles
 			n.pc_items=nodo_padre.pc_items
@@ -91,8 +94,8 @@ class Minimax:
 				break		
 
 			#condicion de parada porque no para por las otras XD
-			#if i==100:
-			#	break
+			if i==30:
+				break
 
 			#si encuentra una hoja
 			if self.lista_nodos[0].manzanas_disponibles==None:
@@ -119,8 +122,8 @@ class Minimax:
 			i=i+1
 
 		self.salida()
-		#self.resumen_mini_max()
-		self.print_nodo(self.nodos_expandidos[0])
+		self.resumen_mini_max()
+		#self.print_nodo(self.nodos_expandidos[0])
 
 	def salida(self):
 		print "utilidades nodos_hoja"
