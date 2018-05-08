@@ -23,6 +23,7 @@ class Minimax:
 		nodo.pos_cn=self.partida.interfaz.pos_cn
 		self.lista_nodos.append(nodo)
 
+
 	#Crea una instancia de la clase nodo y lo returna
 	def crear_nodo(self,x,y,nodo_padre):
 		
@@ -42,7 +43,6 @@ class Minimax:
 			n.pos_cb=[x,y]
 			n.pos_cn=nodo_padre.pos_cn
 
-		#print nodo_padre.manzanas_disponibles,"hola"
 		if [x,y] in nodo_padre.manzanas_disponibles:
 				manzanas=nodo_padre.manzanas_disponibles.remove([x,y])
 				n.manzanas_disponibles=manzanas
@@ -66,15 +66,17 @@ class Minimax:
 
 	def expandir_nodo(self,nodo):
 		nodos=[]
-		if nodo.type==False:
-			posibilidades=self.partida.next([nodo.pos_cn[0],nodo.pos_cn[1]])
-		else:
-			posibilidades=self.partida.next([nodo.pos_cb[0],nodo.pos_cb[1]])
-
-		print posibilidades,"hola"
-		for pos in posibilidades:
-			nodos.append(self.crear_nodo(pos[0],pos[1],nodo))
-
+		#evitar que expanda nodos hoja
+		if nodo.manzanas_disponibles!=None:
+			if nodo.type==False:
+				posibilidades=self.partida.next([nodo.pos_cb[0],nodo.pos_cb[1]])
+				for pos in posibilidades:
+					nodos.append(self.crear_nodo(pos[0],pos[1],nodo))
+			else:
+				posibilidades=self.partida.next([nodo.pos_cn[0],nodo.pos_cn[1]])
+			
+			for pos in posibilidades:
+				nodos.append(self.crear_nodo(pos[0],pos[1],nodo))
 		return nodos
 
 	#funcionamiento similar al de amplitud
@@ -82,31 +84,68 @@ class Minimax:
 		self.crear_nodo_inicial()
 		i=0
 		while True:
-			#print len(self.partida.interfaz.manzanas),"|hola"
-			
-			#if self.lista_nodos[0].manzanas_disponibles==[]:
-			if i==1:
-				print "termino"
+			if self.lista_nodos==[]:
+				break		
+			if i==2000000:
 				break
 
+			if self.lista_nodos[0].manzanas_disponibles==None:
+				self.lista_nodos[0].utilidad=len(self.lista_nodos[0].user_items)-len(self.lista_nodos[0].pc_items)
+				self.nodos_expandidos.append(self.lista_nodos[0])
+				self.lista_nodos.pop(0)
+
+
 			print "nodo a expandir",self.lista_nodos[0].x," ",self.lista_nodos[0].y
-
-			expandidos=self.expandir_nodo(self.lista_nodos[0])
-
-			for nodo in expandidos:
-				#agrega cada nodo hijo al final de la lista
-				self.lista_nodos.append(nodo)
-
-			#sumarlo a la lista de expandidos
-			self.nodos_expandidos.append(self.lista_nodos[0])
-			#eliminarlo de la lista a recorrer
-			self.lista_nodos.pop(0)
+			expandidos=[]
+			if self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
+				expandidos=self.expandir_nodo(self.lista_nodos[0])
+				for nodo in expandidos:
+					#agrega cada nodo hijo al final de la lista
+					self.lista_nodos.append(nodo)
+				#sumarlo a la lista de expandidos
+				self.nodos_expandidos.append(self.lista_nodos[0])
+				#eliminarlo de la lista a recorrer
+				self.lista_nodos.pop(0)
+			else:
+				self.lista_nodos.pop(0)
 
 			i=i+1
 
-		self.resumen_mini_max()
+		self.salida()
+		#self.resumen_mini_max()
+
+	def salida(self):
+		print "utilidades nodos_hoja"
+		for nodo in self.nodos_expandidos:
+			if nodo.utilidad != float("inf") and nodo.utilidad != (-1*float("inf")):
+				print nodo.utilidad
+		print "fin nodos_hoja"
+
+	def prof_max(self):
+		for nodo in self.nodos_expandidos:
+			if flag < nodo.profundidad:
+				flag=nodo.profundidad
+		return flag
 
 	def resumen_mini_max(self):
+		print "ptes"
+		print len(self.lista_nodos)
+		print "expandidos"
+		print len(self.nodos_expandidos)
+		"""
+		for nodo in self.lista_nodos:
+			print "coord_x ",nodo.x
+			print "coord_y ",nodo.y
+			print "prof ",nodo.profundidad
+			print "manz ",nodo.manzanas_disponibles
+			print "user ",nodo.user_items
+			print "pc ",nodo.pc_items
+			print "type ",nodo.type
+			print "pos_user ",nodo.pos_cn
+			print "pos_pc ",nodo.pos_cb
+			print type(nodo.padre)
+			print "--------------------"
+		print "Expandidos"
 		for nodo in self.nodos_expandidos:
 			print "coord_x ",nodo.x
 			print "coord_y ",nodo.y
@@ -117,4 +156,33 @@ class Minimax:
 			print "type ",nodo.type
 			print "pos_user ",nodo.pos_cn
 			print "pos_pc ",nodo.pos_cb
+			print type(nodo.padre)
 			print "--------------------"
+		"""
+
+	def print_nodo(self,nodo):
+		print "coord_x ",nodo.x
+		print "coord_y ",nodo.y
+		print "prof ",nodo.profundidad
+		print "manz ",nodo.manzanas_disponibles
+		print "user ",nodo.user_items
+		print "pc ",nodo.pc_items
+		print "type ",nodo.type
+		print "pos_user ",nodo.pos_cn
+		print "pos_pc ",nodo.pos_cb
+		print type(nodo.padre)
+		print "--------------------"
+
+	#evita ciclos
+	def nodo_fue_expandido(self,nodo_padre,nodo_a_verificar):
+		#llego a la raiz
+		if isinstance(nodo_padre, int) is True:
+			#print "expande es el nodo raiz"
+			return False
+		#si es igual a algun nodo padre 
+		elif nodo_a_verificar.x == nodo_padre.x and nodo_a_verificar.y == nodo_padre.y and nodo_a_verificar.manzanas_disponibles == nodo_padre.manzanas_disponibles and nodo_padre.user_items==nodo_a_verificar.user_items and nodo_padre.pc_items==nodo_a_verificar.pc_items:
+			#print "ya se ha expandido no expande"
+			return True
+		else:
+			#print "ciclo"
+			return self.nodo_fue_expandido(nodo_padre.padre,nodo_a_verificar)
