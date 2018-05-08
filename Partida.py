@@ -48,6 +48,7 @@ class Partida:
 			elif self.turno==False:
 				copia=deepcopy(self)
 				minimax=Minimax(copia)
+				minimax.calcular()
 				self.turno=True
 
 				#aleatorio

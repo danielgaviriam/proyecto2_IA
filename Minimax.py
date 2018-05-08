@@ -77,7 +77,7 @@ class Minimax:
 			
 			for pos in posibilidades:
 				nodos.append(self.crear_nodo(pos[0],pos[1],nodo))
-				
+
 		return nodos
 
 	#funcionamiento similar al de amplitud
@@ -87,7 +87,7 @@ class Minimax:
 		while True:
 			if self.lista_nodos==[]:
 				break		
-			if i==2000000:
+			if i==2000:
 				break
 
 			if self.lista_nodos[0].manzanas_disponibles==None:
