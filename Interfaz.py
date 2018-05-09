@@ -25,7 +25,7 @@ class Interfaz:
 
 		while int(self.num_items)>33 or int(self.num_items)%2==0:
 			#self.num_items = raw_input("Numero de items(impar & <=33): ")
-			self.num_items=7
+			self.num_items=1
 
 		self.coordenadas_aleatorias(int(self.num_items))
 	

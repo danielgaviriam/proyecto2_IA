@@ -28,44 +28,45 @@ class Minimax:
 	#Crea una instancia de la clase nodo y lo returna
 	def crear_nodo(self,x,y,nodo_padre):
 		
-		test=deepcopy(nodo_padre)
+		copia_nodo_padre=deepcopy(nodo_padre)
 
 		n=Nodo()
 		n.x=x
 		n.y=y
-		n.padre=test
-		n.profundidad = test.profundidad + 1
-		if test.type==False:
+		n.padre=copia_nodo_padre
+		n.profundidad = copia_nodo_padre.profundidad + 1
+		if copia_nodo_padre.type==False:
 			n.type=True
 			n.utilidad=float("inf")
 			n.pos_cb=[x,y]
-			n.pos_cn=test.pos_cn
+			n.pos_cn=copia_nodo_padre.pos_cn
 		else:
 			n.type=False
 			n.utilidad=-1 * float("inf")
 			n.pos_cn=[x,y]
-			n.pos_cb=test.pos_cb
+			n.pos_cb=copia_nodo_padre.pos_cb
 
-		if [x,y] in test.manzanas_disponibles:
-
-			manzanas=test.manzanas_disponibles.remove([x,y])
+		if [x,y] in copia_nodo_padre.manzanas_disponibles:
+			copia_nodo_padre.manzanas_disponibles.remove([x,y])
+			manzanas=copia_nodo_padre.manzanas_disponibles
 			n.manzanas_disponibles=manzanas
+			
 
-			if test.type==False:
-				items_pc=test.pc_items
+			if copia_nodo_padre.type==False:
+				items_pc=copia_nodo_padre.pc_items
 				items_pc.append([x,y])
 				n.pc_items=items_pc
-				n.user_items=test.user_items
+				n.user_items=copia_nodo_padre.user_items
 			else:
-				items_user=test.user_items
+				items_user=copia_nodo_padre.user_items
 				items_user.append([x,y])
 				n.user_items=items_user
-				n.pc_items=test.pc_items
+				n.pc_items=copia_nodo_padre.pc_items
 					
 		else:
-			n.manzanas_disponibles=test.manzanas_disponibles
-			n.pc_items=test.pc_items
-			n.user_items=test.user_items
+			n.manzanas_disponibles=copia_nodo_padre.manzanas_disponibles
+			n.pc_items=copia_nodo_padre.pc_items
+			n.user_items=copia_nodo_padre.user_items
 
 		return n
 
@@ -74,7 +75,7 @@ class Minimax:
 		#Evitar referencia
 		nodo_copia=deepcopy(nodo)
 		#evitar que expanda nodos hoja
-		if nodo.manzanas_disponibles!=None:
+		if nodo_copia.manzanas_disponibles!=[]:
 			
 			posibilidades=self.next(nodo_copia)
 
@@ -92,15 +93,10 @@ class Minimax:
 			if self.lista_nodos==[]:
 				break		
 
-			#condicion de parada porque no para por las otras XD
-			if i==600:
-				break
-			
-
 			#si encuentra una hoja
-			if self.lista_nodos[0].manzanas_disponibles==None:
+			if self.lista_nodos[0].manzanas_disponibles==[]:
 				#calcula la utilidad
-				self.lista_nodos[0].utilidad=len(self.lista_nodos[0].user_items)-len(self.lista_nodos[0].pc_items)
+				self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
 
 				self.nodos_expandidos.append(self.lista_nodos[0])
 				self.lista_nodos.pop(0)
@@ -123,9 +119,8 @@ class Minimax:
 
 			i=i+1
 
-		self.salida()
 		self.resumen_mini_max()
-		#self.print_nodo(self.nodos_expandidos[0])
+		self.salida()
 
 	def salida(self):
 		print "utilidades nodos_hoja"
@@ -184,10 +179,6 @@ class Minimax:
 		#si es igual a algun nodo padre 
 		elif nodo_a_verificar.pos_cb == nodo_padre.pos_cb and nodo_a_verificar.pos_cn == nodo_padre.pos_cn and nodo_a_verificar.manzanas_disponibles == nodo_padre.manzanas_disponibles and nodo_padre.user_items==nodo_a_verificar.user_items and nodo_padre.pc_items==nodo_a_verificar.pc_items:	
 			print "ya se ha expandido no expande"
-			print "---------------------------------------------------------Evito-----------------------------"
-			self.print_nodo(nodo_a_verificar)
-			self.print_nodo(nodo_padre)
-			print "---------------------------------------------------------Evito-----------------------------"
 			#self.print_nodo(nodo_a_verificar)
 			return True
 		else:
