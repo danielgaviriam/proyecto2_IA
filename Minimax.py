@@ -28,6 +28,7 @@ class Minimax:
 	#Crea una instancia de la clase nodo y lo returna
 	def crear_nodo(self,x,y,nodo_padre):
 		
+		#esta copia se hace solo para guardar los datos en el hijo, sin alterar la referencia al padre.
 		copia_nodo_padre=deepcopy(nodo_padre)
 
 		n=Nodo()
@@ -89,12 +90,13 @@ class Minimax:
 		self.crear_nodo_inicial()
 		i=0
 		while True:
+			print "---------------------",len(self.lista_nodos),"-------------------------"
 			#si temina
 			if self.lista_nodos==[]:
 				break		
 
-			if i==100:
-				break
+			#if i==00000:
+			#	break
 
 			#si encuentra una hoja
 			if self.lista_nodos[0].manzanas_disponibles==[]:
@@ -183,7 +185,8 @@ class Minimax:
 		#si es igual a algun nodo padre 
 		elif nodo_a_verificar.pos_cb == nodo_padre.pos_cb and nodo_a_verificar.pos_cn == nodo_padre.pos_cn and nodo_a_verificar.manzanas_disponibles == nodo_padre.manzanas_disponibles and nodo_padre.user_items==nodo_a_verificar.user_items and nodo_padre.pc_items==nodo_a_verificar.pc_items:	
 			print "ya se ha expandido no expande"
-			#self.print_nodo(nodo_a_verificar)
+			self.print_nodo(nodo_a_verificar)
+			self.print_nodo(nodo_padre)
 			return True
 		else:
 			print "ciclo"
@@ -247,21 +250,25 @@ class Minimax:
 		return posibilidades
 
 	def actualizar_utilidades_arbol(self):
-		index=self.posicion_hoja_mas_profunda()
-		hoja=self.nodos_expandidos[index]
-		if isinstance(hoja.padre, int):
-			return  hoja
+		
+		hoja=self.posicion_hoja_mas_profunda()
+		if hoja !=0:
+			if isinstance(hoja.padre, int) is True:
+				print "llegue al raiz,no hay mas hojas"
+				#return hoja.utilidad
 
-		if hoja.type==False:
-			if hoja.padre.utilidad > hoja.utilidad:
-				hoja.padre.utilidad=hoja.utilidad
-		else:
-			if hoja.padre.utilidad < hoja.utilidad:
-				hoja.padre.utilidad=hoja.utilidad
+			else: 
+				if hoja.type==False:
+					if hoja.padre.utilidad > hoja.utilidad:
+						hoja.padre.utilidad=hoja.utilidad
+				else:
+					if hoja.padre.utilidad < hoja.utilidad:
+						hoja.padre.utilidad=hoja.utilidad
 
-		self.nodos_expandidos.pop(index)
-		self.actualizar_utilidades_arbol()
+				self.nodos_expandidos.remove(hoja)
+				self.actualizar_utilidades_arbol()
 
+	
 	def posicion_hoja_mas_profunda(self):
 		flag=0
 
@@ -272,10 +279,5 @@ class Minimax:
 			if nodo.utilidad != -1 * float("inf") and nodo.utilidad != float("inf") and flag!=0:
 				if nodo.profundidad>flag.profundidad:
 					flag=nodo
-
-		if flag.padre in self.nodos_expandidos:
-			print "yeeeeees"
-		else:
-			print "nooooo"
 
 		return flag

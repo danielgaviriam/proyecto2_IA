@@ -49,8 +49,10 @@ class Partida:
 				copia=deepcopy(self)
 				minimax=Minimax(copia)
 				minimax.calcular()
-				nodo=minimax.actualizar_utilidades_arbol()
-				#print "--------------".nodo
+				minimax.actualizar_utilidades_arbol()
+				print minimax.nodos_expandidos[0].utilidad
+				
+				
 				self.turno=True
 
 				#aleatorio
@@ -83,6 +85,9 @@ class Partida:
 						self.moves([int(self.b7.x/60),int(self.b7.y/60)],1)
 					if self.b8.collidepoint(mouse_pos):
 						self.moves([int(self.b8.x/60),int(self.b8.y/60)],1)
+
+
+	
 
 
 	#LA funcion misma_posicion y next, seran redefinidas en minimax, las de la clase partida seran unicamente
