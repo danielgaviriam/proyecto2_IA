@@ -17,7 +17,3 @@ class Nodo:
 		self.pc_items=[]
 		self.pos_cb=[]
 		self.pos_cn=[]
-
-	def get_manzanas(self):
-		return manzanas_disponibles
-
