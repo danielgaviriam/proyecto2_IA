@@ -33,7 +33,7 @@ class Minimax:
 		n=Nodo()
 		n.x=x
 		n.y=y
-		n.padre=copia_nodo_padre
+		n.padre=nodo_padre
 		n.profundidad = copia_nodo_padre.profundidad + 1
 		if copia_nodo_padre.type==False:
 			n.type=True
@@ -73,14 +73,14 @@ class Minimax:
 	def expandir_nodo(self,nodo):
 		nodos=[]
 		#Evitar referencia
-		nodo_copia=deepcopy(nodo)
+		#nodo=deepcopy(nodo)
 		#evitar que expanda nodos hoja
-		if nodo_copia.manzanas_disponibles!=[]:
+		if nodo.manzanas_disponibles!=[]:
 			
-			posibilidades=self.next(nodo_copia)
+			posibilidades=self.next(nodo)
 
 			for pos in posibilidades:
-				nodos.append(self.crear_nodo(pos[0],pos[1],nodo_copia))
+				nodos.append(self.crear_nodo(pos[0],pos[1],nodo))
 
 		return nodos
 
@@ -92,6 +92,9 @@ class Minimax:
 			#si temina
 			if self.lista_nodos==[]:
 				break		
+
+			if i==100:
+				break
 
 			#si encuentra una hoja
 			if self.lista_nodos[0].manzanas_disponibles==[]:
@@ -152,6 +155,7 @@ class Minimax:
 			print "type ",nodo.type
 			print "pos_user ",nodo.pos_cn
 			print "pos_pc ",nodo.pos_cb
+			print "utilidad",nodo.utilidad
 			print type(nodo.padre)
 			print "--------------------"
 		
@@ -241,3 +245,37 @@ class Minimax:
 				posibilidades.append([(x-2),(y+1)])
 
 		return posibilidades
+
+	def actualizar_utilidades_arbol(self):
+		index=self.posicion_hoja_mas_profunda()
+		hoja=self.nodos_expandidos[index]
+		if isinstance(hoja.padre, int):
+			return  hoja
+
+		if hoja.type==False:
+			if hoja.padre.utilidad > hoja.utilidad:
+				hoja.padre.utilidad=hoja.utilidad
+		else:
+			if hoja.padre.utilidad < hoja.utilidad:
+				hoja.padre.utilidad=hoja.utilidad
+
+		self.nodos_expandidos.pop(index)
+		self.actualizar_utilidades_arbol()
+
+	def posicion_hoja_mas_profunda(self):
+		flag=0
+
+		for nodo in self.nodos_expandidos:
+			if nodo.utilidad != -1 * float("inf") and nodo.utilidad != float("inf") and flag==0:
+				flag=nodo
+
+			if nodo.utilidad != -1 * float("inf") and nodo.utilidad != float("inf") and flag!=0:
+				if nodo.profundidad>flag.profundidad:
+					flag=nodo
+
+		if flag.padre in self.nodos_expandidos:
+			print "yeeeeees"
+		else:
+			print "nooooo"
+
+		return flag

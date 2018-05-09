@@ -49,6 +49,8 @@ class Partida:
 				copia=deepcopy(self)
 				minimax=Minimax(copia)
 				minimax.calcular()
+				nodo=minimax.actualizar_utilidades_arbol()
+				#print "--------------".nodo
 				self.turno=True
 
 				#aleatorio
