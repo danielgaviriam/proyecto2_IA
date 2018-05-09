@@ -28,43 +28,44 @@ class Minimax:
 	#Crea una instancia de la clase nodo y lo returna
 	def crear_nodo(self,x,y,nodo_padre):
 		
+		test=deepcopy(nodo_padre)
+
 		n=Nodo()
 		n.x=x
 		n.y=y
-		n.padre=nodo_padre
-		n.profundidad = nodo_padre.profundidad + 1
-		if nodo_padre.type==False:
+		n.padre=test
+		n.profundidad = test.profundidad + 1
+		if test.type==False:
 			n.type=True
 			n.utilidad=float("inf")
 			n.pos_cb=[x,y]
-			n.pos_cn=nodo_padre.pos_cn
+			n.pos_cn=test.pos_cn
 		else:
 			n.type=False
 			n.utilidad=-1 * float("inf")
 			n.pos_cn=[x,y]
-			n.pos_cb=nodo_padre.pos_cb
+			n.pos_cb=test.pos_cb
 
-		if [x,y] in nodo_padre.manzanas_disponibles:
-			print "tomo manzana!!!----",[x,y],"------",nodo_padre.manzanas_disponibles
+		if [x,y] in test.manzanas_disponibles:
 
-			manzanas=nodo_padre.manzanas_disponibles.remove([x,y])
+			manzanas=test.manzanas_disponibles.remove([x,y])
 			n.manzanas_disponibles=manzanas
 
-			if nodo_padre.type==False:
-				items_pc=nodo_padre.pc_items
+			if test.type==False:
+				items_pc=test.pc_items
 				items_pc.append([x,y])
 				n.pc_items=items_pc
-				n.user_items=nodo_padre.user_items
+				n.user_items=test.user_items
 			else:
-				items_user=nodo_padre.user_items
+				items_user=test.user_items
 				items_user.append([x,y])
 				n.user_items=items_user
-				n.pc_items=nodo_padre.pc_items
+				n.pc_items=test.pc_items
 					
 		else:
-			n.manzanas_disponibles=nodo_padre.manzanas_disponibles
-			n.pc_items=nodo_padre.pc_items
-			n.user_items=nodo_padre.user_items
+			n.manzanas_disponibles=test.manzanas_disponibles
+			n.pc_items=test.pc_items
+			n.user_items=test.user_items
 
 		return n
 
@@ -92,10 +93,6 @@ class Minimax:
 			#si temina
 			if self.lista_nodos==[]:
 				break		
-
-			#condicion de parada porque no para por las otras XD
-			if i==30:
-				break
 
 			#si encuentra una hoja
 			if self.lista_nodos[0].manzanas_disponibles==None:
