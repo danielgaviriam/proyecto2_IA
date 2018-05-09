@@ -83,6 +83,10 @@ class Partida:
 						self.moves([int(self.b8.x/60),int(self.b8.y/60)],1)
 
 
+	#LA funcion misma_posicion y next, seran redefinidas en minimax, las de la clase partida seran unicamente
+	#para las jugadas del usuario, ya que se esta trabajando con las variables de la clase interfaz, miestras que
+	#en minimax debemos trabajar con las de los nodos que se van expandiendo
+
 	#Evita que ambos caballos no caigan en la misma posicion
 	def misma_posicion(self,x,y):
 		if self.turno==True:

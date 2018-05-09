@@ -22,8 +22,10 @@ class Interfaz:
 	#Funcion que se encarga de recibir por terminal la cantidad de items, con ese valor
 	#llama a la funcion que crea las posiciones aleatoriamente para manzanas y caballos
 	def cantidad_items(self):
+
 		while int(self.num_items)>33 or int(self.num_items)%2==0:
-			self.num_items = raw_input("Numero de items(impar & <=33): ")
+			#self.num_items = raw_input("Numero de items(impar & <=33): ")
+			self.num_items=7
 
 		self.coordenadas_aleatorias(int(self.num_items))
 	

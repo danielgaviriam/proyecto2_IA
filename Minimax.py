@@ -75,11 +75,9 @@ class Minimax:
 		nodo_copia=deepcopy(nodo)
 		#evitar que expanda nodos hoja
 		if nodo.manzanas_disponibles!=None:
-			if nodo_copia.type==False:
-				posibilidades=self.partida.next([nodo_copia.pos_cb[0],nodo_copia.pos_cb[1]])
-			else:
-				posibilidades=self.partida.next([nodo_copia.pos_cn[0],nodo_copia.pos_cn[1]])
 			
+			posibilidades=self.next(nodo_copia)
+
 			for pos in posibilidades:
 				nodos.append(self.crear_nodo(pos[0],pos[1],nodo_copia))
 
@@ -94,9 +92,16 @@ class Minimax:
 			if self.lista_nodos==[]:
 				break		
 
+			#condicion de parada porque no para por las otras XD
+			if i==600:
+				break
+			
+
 			#si encuentra una hoja
 			if self.lista_nodos[0].manzanas_disponibles==None:
+				#calcula la utilidad
 				self.lista_nodos[0].utilidad=len(self.lista_nodos[0].user_items)-len(self.lista_nodos[0].pc_items)
+
 				self.nodos_expandidos.append(self.lista_nodos[0])
 				self.lista_nodos.pop(0)
 
@@ -141,6 +146,7 @@ class Minimax:
 		
 		print "expandidos"
 		print len(self.nodos_expandidos)
+		
 		for nodo in self.nodos_expandidos:
 			print "coord_x ",nodo.x
 			print "coord_y ",nodo.y
@@ -153,6 +159,7 @@ class Minimax:
 			print "pos_pc ",nodo.pos_cb
 			print type(nodo.padre)
 			print "--------------------"
+		
 
 	def print_nodo(self,nodo):
 		print "coord_x ",nodo.x
@@ -173,10 +180,73 @@ class Minimax:
 		if isinstance(nodo_padre, int) is True:
 			print "expande es el nodo raiz"
 			return False
+		
 		#si es igual a algun nodo padre 
-		elif nodo_a_verificar.pos_cb == nodo_padre.pos_cb and nodo_a_verificar.pos_cn == nodo_padre.pos_cn and nodo_a_verificar.manzanas_disponibles == nodo_padre.manzanas_disponibles and nodo_padre.user_items==nodo_a_verificar.user_items and nodo_padre.pc_items==nodo_a_verificar.pc_items:
+		elif nodo_a_verificar.pos_cb == nodo_padre.pos_cb and nodo_a_verificar.pos_cn == nodo_padre.pos_cn and nodo_a_verificar.manzanas_disponibles == nodo_padre.manzanas_disponibles and nodo_padre.user_items==nodo_a_verificar.user_items and nodo_padre.pc_items==nodo_a_verificar.pc_items:	
 			print "ya se ha expandido no expande"
+			print "---------------------------------------------------------Evito-----------------------------"
+			self.print_nodo(nodo_a_verificar)
+			self.print_nodo(nodo_padre)
+			print "---------------------------------------------------------Evito-----------------------------"
+			#self.print_nodo(nodo_a_verificar)
 			return True
 		else:
 			print "ciclo"
 			return self.nodo_fue_expandido(nodo_padre.padre,nodo_a_verificar)
+
+	
+	#LA funcion misma_posicion y next, seran redefinidas en minimax, las de la clase partida seran unicamente
+	#para las jugadas del usuario, ya que se esta trabajando con las variables de la clase interfaz, miestras que
+	#en minimax debemos trabajar con las de los nodos que se van expandiendo
+
+	#Evita que ambos caballos no caigan en la misma posicion
+	def misma_posicion(self,x,y,nodo_a_expandir):
+		if nodo_a_expandir.type==True:
+			if int(x)==int(nodo_a_expandir.pos_cb[0]) and int(y)==int(nodo_a_expandir.pos_cb[1]):
+				return False
+		if nodo_a_expandir.type==False:
+			if int(x)==int(nodo_a_expandir.pos_cn[0]) and int(y)==int(nodo_a_expandir.pos_cn[1]):
+				return False
+
+		return True
+
+
+	#Posibles Jugadas que tendra quien se encuentre jugando, es decir
+	#Recibe como parametro la posicion del caballo negro o blanco
+	#Retornar un array con las coordenadas de posibles opciones que tiene segun la posicion
+	def next(self,nodo_a_expandir):
+		posibilidades=[]
+		if nodo_a_expandir.type==False	:
+			x=int(nodo_a_expandir.pos_cb[0])
+			y=int(nodo_a_expandir.pos_cb[1])
+		else:
+			x=int(nodo_a_expandir.pos_cn[0])
+			y=int(nodo_a_expandir.pos_cn[1])
+
+
+		if(x+1)<6 and (y+2)<6:
+			if self.misma_posicion((x+1),(y+2),nodo_a_expandir):
+				posibilidades.append([(x+1),(y+2)])
+		if(x+1)<6 and (y-2)>=0:
+			if self.misma_posicion((x+1),(y-2),nodo_a_expandir):
+				posibilidades.append([(x+1),(y-2)])
+		if(x+2)<6 and (y+1)<6:
+			if self.misma_posicion((x+2),(y+1),nodo_a_expandir):
+				posibilidades.append([(x+2),(y+1)])
+		if(x+2)<6 and (y-1)>=0:
+			if self.misma_posicion((x+2),(y-1),nodo_a_expandir):
+				posibilidades.append([(x+2),(y-1)])
+		if(x-1)>=0 and (y-2)>=0:
+			if self.misma_posicion((x-1),(y-2),nodo_a_expandir):
+				posibilidades.append([(x-1),(y-2)])
+		if(x-1)>=0 and (y+2)<6:
+			if self.misma_posicion((x-1),(y+2),nodo_a_expandir):
+				posibilidades.append([(x-1),(y+2)])
+		if(x-2)>=0 and (y-1)>=0:
+			if self.misma_posicion((x-2),(y-1),nodo_a_expandir):
+				posibilidades.append([(x-2),(y-1)])
+		if(x-2)>=0 and (y+1)<6:
+			if self.misma_posicion((x-2),(y+1),nodo_a_expandir):
+				posibilidades.append([(x-2),(y+1)])
+
+		return posibilidades
