@@ -5,6 +5,7 @@ import time as t
 from pygame.locals import *
 from random import randint
 from Minimax import *
+from Nodo import *
 from copy import copy, deepcopy
 
 
@@ -49,7 +50,8 @@ class Partida:
 				copia=deepcopy(self)
 				minimax=Minimax(copia)
 				minimax.calcular()
-				minimax.actualizar_utilidades_arbol()
+				nodo=minimax.actualizar_utilidades_arbol()
+				print nodo
 				print minimax.nodos_expandidos[0].utilidad
 				
 				

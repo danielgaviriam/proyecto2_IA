@@ -3,6 +3,9 @@ import sys
 from math import *
 from copy import copy, deepcopy
 
+#Permita hacer un mayor numero de llamados recursivos
+sys.setrecursionlimit(100000000)
+
 class Minimax:
 
 	def __init__(self,Partida):
@@ -90,13 +93,13 @@ class Minimax:
 		self.crear_nodo_inicial()
 		i=0
 		while True:
-			print "---------------------",len(self.lista_nodos),"-------------------------"
+			print "---------------------",i,"-------------------------"
 			#si temina
 			if self.lista_nodos==[]:
 				break		
 
-			#if i==00000:
-			#	break
+			if i==100000:
+				break
 
 			#si encuentra una hoja
 			if self.lista_nodos[0].manzanas_disponibles==[]:
@@ -255,7 +258,7 @@ class Minimax:
 		if hoja !=0:
 			if isinstance(hoja.padre, int) is True:
 				print "llegue al raiz,no hay mas hojas"
-				#return hoja.utilidad
+				return hoja
 
 			else: 
 				if hoja.type==False:
