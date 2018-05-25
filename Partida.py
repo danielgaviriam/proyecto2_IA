@@ -18,7 +18,7 @@ class Partida:
 		self.user_items=[]
 		self.pc_items=[]
 		#Variable global para manejar los turnos durante el juego
-		self.turno=False
+		self.turno=True
 		#Funcion utilizada para pintar en la pantalla una flecha que indica quien esta jugando(a quien le toca)
 		self.actualizar_turno()
 
@@ -159,7 +159,7 @@ class Partida:
 
 	#Recorre el array de posibilidades y crea un boton por cada una (esto solo para el usuario)
 	def crear_botones_player(self, posibilidades):
-		marco= turnero=pygame.image.load('pix/marco.png')
+		marco=pygame.image.load('pix/marco.png')
 
 		#self.interfaz.b1
 		i=1

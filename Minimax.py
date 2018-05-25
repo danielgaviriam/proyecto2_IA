@@ -76,9 +76,7 @@ class Minimax:
 
 	def expandir_nodo(self,nodo):
 		nodos=[]
-		#Evitar referencia
-		#nodo=deepcopy(nodo)
-		#evitar que expanda nodos hoja
+		
 		if nodo.manzanas_disponibles!=[]:
 			
 			posibilidades=self.next(nodo)
@@ -93,21 +91,24 @@ class Minimax:
 		self.crear_nodo_inicial()
 		i=0
 		while True:
-			print "---------------------",i,"-------------------------"
-			#si temina
-			if self.lista_nodos==[]:
+			if self.lista_nodos[0].profundidad==9:
 				break		
 
-			if i==100000:
-				break
+			print "---------------------",self.lista_nodos[0].profundidad,"-------------------------"
+			#Esta expandiendo nodo de profundidad 9, entonces ya termino los de prof 8
 
-			#si encuentra una hoja
-			if self.lista_nodos[0].manzanas_disponibles==[]:
-				#calcula la utilidad
-				self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
+			#si va a expandir un nodo de prof 8
+			if self.lista_nodos[0].profundidad==8:
+				#si ningun jugador a tomado manzanas
+				if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
+					#No hay solucion-Empate
+					self.lista_nodos[0].utilidad=0
+				else:
+					self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
 
 				self.nodos_expandidos.append(self.lista_nodos[0])
 				self.lista_nodos.pop(0)
+				
 
 			#Evalua si es un ciclo, sino lo es, lo expande
 			elif self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
@@ -217,7 +218,7 @@ class Minimax:
 	#Retornar un array con las coordenadas de posibles opciones que tiene segun la posicion
 	def next(self,nodo_a_expandir):
 		posibilidades=[]
-		if nodo_a_expandir.type==False	:
+		if nodo_a_expandir.type==False:
 			x=int(nodo_a_expandir.pos_cb[0])
 			y=int(nodo_a_expandir.pos_cb[1])
 		else:
