@@ -34,14 +34,11 @@ class Minimax2:
 		
 		i=0
 		while True:
+			#Si va a expandir nodos de mayor profundidad
 			if self.lista_nodos ==[]:
-				break		
-
-			print "---------------------profundidad : ",self.lista_nodos[0].profundidad,"-------------------------"
-			
-			
-			#si va a expandir un nodo de prof 8
-			if self.lista_nodos[0].profundidad==4:
+				break				
+			#si va a expandir un nodo de prof 5
+			if self.lista_nodos[0].profundidad==5:
 				#si ningun jugador a tomado manzanas
 				if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
 					#No hay solucion-Empate
@@ -55,9 +52,6 @@ class Minimax2:
 
 			#Evalua si es un ciclo, sino lo es, lo expande
 			elif self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
-				print "nodo a expandir",self.lista_nodos[0].x," ",self.lista_nodos[0].y
-				print "manzanas cb blanco",len(self.lista_nodos[0].pc_items)
-				print "manzanas cb negro",len(self.lista_nodos[0].user_items)
 				
 				expandidos = self.expandir_nodo(self.lista_nodos[0])
 				
@@ -79,7 +73,8 @@ class Minimax2:
 
 		#self.resumen_mini_max()
 		#self.salida()
-		self.actualizar_utilidades_arbol()
+		print "termino-expandir"
+		self.actualizar_utilidades()
 		
 
 
@@ -104,7 +99,7 @@ class Minimax2:
 	def expandir_nodo(self,nodo):
 		nodos=[]
 		
-		if nodo.manzanas_disponibles != 0:
+		if nodo.manzanas_disponibles != []:
 			
 			posibilidades = self.movimientos_posibles(nodo)
 
@@ -119,7 +114,7 @@ class Minimax2:
 	#Retornar un array con las coordenadas de posibles opciones que tiene segun la posicion
 	def movimientos_posibles(self,nodo_a_expandir):
 		posibilidades=[]
-		if nodo_a_expandir.type==False:
+		if nodo_a_expandir.type=="Max":
 			x = int(nodo_a_expandir.pos_cb[0])
 			y = int(nodo_a_expandir.pos_cb[1])
 		else:
@@ -156,10 +151,10 @@ class Minimax2:
 
 	#Evita que ambos caballos no caigan en la misma posicion
 	def misma_posicion(self,x,y,nodo_a_expandir):
-		if nodo_a_expandir.type==True:
+		if nodo_a_expandir.type=="Min":
 			if int(x)==int(nodo_a_expandir.pos_cb[0]) and int(y)==int(nodo_a_expandir.pos_cb[1]):
 				return False
-		if nodo_a_expandir.type==False:
+		if nodo_a_expandir.type=="Max":
 			if int(x)==int(nodo_a_expandir.pos_cn[0]) and int(y)==int(nodo_a_expandir.pos_cn[1]):
 				return False
 
@@ -214,7 +209,30 @@ class Minimax2:
 
 		return nodo
 
-	
+	def actualizar_utilidades(self):
+		print "tamano a recorrer",len(self.nodos_expandidos)
+		for hoja in reversed(self.nodos_expandidos):
+			if isinstance(hoja.padre, int) is True:
+				print "llegue al raiz,no hay mas hojas"
+				print "utilidad",hoja.utilidad
+				print "utilidad",hoja.pos_cb
+				self.pos_cb = hoja.pos_cb
+				return hoja.pos_cb
+
+			if hoja.type == "Max":
+				if hoja.padre.utilidad > hoja.utilidad:
+					hoja.padre.utilidad = hoja.utilidad
+					if hoja.padre.profundidad == 0:
+						hoja.padre.pos_cb = hoja.pos_cb
+			else:
+				if hoja.padre.utilidad < hoja.utilidad:
+					hoja.padre.utilidad = hoja.utilidad
+					if hoja.padre.profundidad == 0:
+						hoja.padre.pos_cb = hoja.pos_cb
+
+			self.nodos_expandidos.remove(hoja)
+
+
 	def actualizar_utilidades_arbol(self):
 		
 		hoja = self.posicion_hoja_mas_profunda()

@@ -24,8 +24,8 @@ class Interfaz:
 	def cantidad_items(self):
 
 		while int(self.num_items)>33 or int(self.num_items)%2==0:
-			#self.num_items = raw_input("Numero de items(impar & <=33): ")
-			self.num_items=5
+			self.num_items = raw_input("Numero de items(impar & <=33): ")
+			#self.num_items=5
 
 		self.coordenadas_aleatorias(int(self.num_items))
 	

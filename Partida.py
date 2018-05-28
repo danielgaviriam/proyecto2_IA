@@ -19,7 +19,7 @@ class Partida:
 		self.user_items=[]
 		self.pc_items=[]
 		#Variable global para manejar los turnos durante el juego
-		self.turno=True
+		self.turno=False
 		#Funcion utilizada para pintar en la pantalla una flecha que indica quien esta jugando(a quien le toca)
 		self.actualizar_turno()
 
@@ -48,14 +48,6 @@ class Partida:
 				self.crear_botones_player(pos)
 
 			elif self.turno==False:
-				"""
-				copia=deepcopy(self)
-				minimax=Minimax(copia)
-				minimax.calcular()
-				nodo=minimax.actualizar_utilidades_arbol()
-				print nodo
-				print minimax.nodos_expandidos[0].utilidad
-				"""
 				minimax = Minimax2(self.interfaz.pos_cn,self.interfaz.pos_cb,self.user_items,self.pc_items,self.interfaz.manzanas)
 				
 				print "mipos",minimax.pos_cb
