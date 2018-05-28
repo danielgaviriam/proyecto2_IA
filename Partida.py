@@ -5,6 +5,7 @@ import time as t
 from pygame.locals import *
 from random import randint
 from Minimax import *
+from Minimax2 import *
 from Nodo import *
 from copy import copy, deepcopy
 
@@ -47,12 +48,15 @@ class Partida:
 				self.crear_botones_player(pos)
 
 			elif self.turno==False:
+				"""
 				copia=deepcopy(self)
 				minimax=Minimax(copia)
 				minimax.calcular()
 				nodo=minimax.actualizar_utilidades_arbol()
 				print nodo
 				print minimax.nodos_expandidos[0].utilidad
+				"""
+				minimax = Minimax2(self.interfaz.pos_cn,self.interfaz.pos_cb,self.user_items,self.pc_items,self.interfaz.manzanas)
 				
 				
 				self.turno=True

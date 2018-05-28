@@ -13,6 +13,51 @@ class Minimax:
 		self.lista_nodos=[]
 		self.nodos_expandidos=[]
 
+	#funcionamiento similar al de amplitud
+	def calcular(self):
+		self.crear_nodo_inicial()
+		i=0
+		while True:
+			if self.lista_nodos[0].profundidad==9:
+				break		
+
+			print "---------------------",self.lista_nodos[0].profundidad,"-------------------------"
+			#Esta expandiendo nodo de profundidad 9, entonces ya termino los de prof 8
+			
+			#si va a expandir un nodo de prof 8
+			if self.lista_nodos[0].profundidad==8:
+				#si ningun jugador a tomado manzanas
+				if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
+					#No hay solucion-Empate
+					self.lista_nodos[0].utilidad=0
+				else:
+					self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
+
+				self.nodos_expandidos.append(self.lista_nodos[0])
+				self.lista_nodos.pop(0)
+			
+
+			#Evalua si es un ciclo, sino lo es, lo expande
+			elif self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
+				print "nodo a expandir",self.lista_nodos[0].x," ",self.lista_nodos[0].y
+				expandidos=[]
+				expandidos=self.expandir_nodo(self.lista_nodos[0])
+				for nodo in expandidos:
+					#agrega cada nodo hijo al final de la lista
+					self.lista_nodos.append(nodo)
+				#sumarlo a la lista de expandidos
+				self.nodos_expandidos.append(self.lista_nodos[0])
+				#eliminarlo de la lista a recorrer
+				self.lista_nodos.pop(0)
+			#es un ciclo, lo borra, sin expandir
+			else:
+				self.lista_nodos.pop(0)
+
+			i=i+1
+
+		self.resumen_mini_max()
+		self.salida()
+
 
 	def crear_nodo_inicial(self):
 		nodo=Nodo()
@@ -86,50 +131,9 @@ class Minimax:
 
 		return nodos
 
-	#funcionamiento similar al de amplitud
-	def calcular(self):
-		self.crear_nodo_inicial()
-		i=0
-		while True:
-			if self.lista_nodos[0].profundidad==9:
-				break		
+	
 
-			print "---------------------",self.lista_nodos[0].profundidad,"-------------------------"
-			#Esta expandiendo nodo de profundidad 9, entonces ya termino los de prof 8
 
-			#si va a expandir un nodo de prof 8
-			if self.lista_nodos[0].profundidad==8:
-				#si ningun jugador a tomado manzanas
-				if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
-					#No hay solucion-Empate
-					self.lista_nodos[0].utilidad=0
-				else:
-					self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
-
-				self.nodos_expandidos.append(self.lista_nodos[0])
-				self.lista_nodos.pop(0)
-				
-
-			#Evalua si es un ciclo, sino lo es, lo expande
-			elif self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
-				print "nodo a expandir",self.lista_nodos[0].x," ",self.lista_nodos[0].y
-				expandidos=[]
-				expandidos=self.expandir_nodo(self.lista_nodos[0])
-				for nodo in expandidos:
-					#agrega cada nodo hijo al final de la lista
-					self.lista_nodos.append(nodo)
-				#sumarlo a la lista de expandidos
-				self.nodos_expandidos.append(self.lista_nodos[0])
-				#eliminarlo de la lista a recorrer
-				self.lista_nodos.pop(0)
-			#es un ciclo, lo borra, sin expandir
-			else:
-				self.lista_nodos.pop(0)
-
-			i=i+1
-
-		self.resumen_mini_max()
-		self.salida()
 
 	def salida(self):
 		print "utilidades nodos_hoja"
