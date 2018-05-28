@@ -58,7 +58,10 @@ class Partida:
 				"""
 				minimax = Minimax2(self.interfaz.pos_cn,self.interfaz.pos_cb,self.user_items,self.pc_items,self.interfaz.manzanas)
 				
-				
+				print "mipos",minimax.pos_cb
+				self.moves(minimax.pos_cb,False)
+
+				#cambia turno
 				self.turno=True
 
 				#aleatorio

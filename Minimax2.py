@@ -12,11 +12,7 @@ class Minimax2:
 		self.lista_nodos = []
 		self.nodos_expandidos = []
 
-		self.pos_cn = pos_cn
-		self.pos_cb = pos_cb
-		self.user_items = user_items
-		self.pc_items = pc_items
-
+		
 		#creamos el nodo inicial
 		nodo=Nodo()
 		nodo.x = pos_cb[0]
@@ -38,17 +34,27 @@ class Minimax2:
 		
 		i=0
 		while True:
-			if self.lista_nodos[0].profundidad==9:
+			if self.lista_nodos ==[]:
 				break		
 
 			print "---------------------profundidad : ",self.lista_nodos[0].profundidad,"-------------------------"
 			
-			if self.lista_nodos[0].profundidad == 1:
-				break
-		
+			
+			#si va a expandir un nodo de prof 8
+			if self.lista_nodos[0].profundidad==4:
+				#si ningun jugador a tomado manzanas
+				if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
+					#No hay solucion-Empate
+					self.lista_nodos[0].utilidad=0
+				else:
+					self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
+
+				self.nodos_expandidos.append(self.lista_nodos[0])
+				self.lista_nodos.pop(0)
+
 
 			#Evalua si es un ciclo, sino lo es, lo expande
-			if self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
+			elif self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
 				print "nodo a expandir",self.lista_nodos[0].x," ",self.lista_nodos[0].y
 				print "manzanas cb blanco",len(self.lista_nodos[0].pc_items)
 				print "manzanas cb negro",len(self.lista_nodos[0].user_items)
@@ -68,10 +74,13 @@ class Minimax2:
 
 			i=i+1
 			if i == 2:
-				break
-				#pass
+				#break
+				pass
+
 		#self.resumen_mini_max()
 		#self.salida()
+		self.actualizar_utilidades_arbol()
+		
 
 
 		#evita ciclos
@@ -204,6 +213,40 @@ class Minimax2:
 			nodo.user_items = copia_nodo_padre.user_items
 
 		return nodo
+
+	
+	def actualizar_utilidades_arbol(self):
+		
+		hoja = self.posicion_hoja_mas_profunda()
+		if hoja != 0:
+			if isinstance(hoja.padre, int) is True:
+				print "llegue al raiz,no hay mas hojas"
+				print "utilidad",hoja.utilidad
+				print "utilidad",hoja.pos_cb
+				self.pos_cb = hoja.pos_cb
+				return hoja.pos_cb
+
+			else: 
+				if hoja.type == "Max":
+					if hoja.padre.utilidad > hoja.utilidad:
+						hoja.padre.utilidad = hoja.utilidad
+						if hoja.padre.profundidad == 0:
+							hoja.padre.pos_cb = hoja.pos_cb
+
+				else:
+					if hoja.padre.utilidad < hoja.utilidad:
+						hoja.padre.utilidad = hoja.utilidad
+						if hoja.padre.profundidad == 0:
+							hoja.padre.pos_cb = hoja.pos_cb
+
+				self.nodos_expandidos.remove(hoja)
+				self.actualizar_utilidades_arbol()
+
+	
+	def posicion_hoja_mas_profunda(self):
+		
+		size = len(self.nodos_expandidos)
+		return self.nodos_expandidos[size-1]
 
 
 	def resumen_mini_max(self):
