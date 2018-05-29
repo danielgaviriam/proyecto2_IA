@@ -39,7 +39,7 @@ class Minimax:
 			if self.lista_nodos ==[]:
 				break				
 			#si va a expandir un nodo de prof 5
-			if self.lista_nodos[0].profundidad==5:
+			if self.lista_nodos[0].profundidad==6:
 				#si ningun jugador a tomado manzanas
 				if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
 					#No hay solucion-Empate
@@ -87,7 +87,7 @@ class Minimax:
 			return False
 		
 		#si es igual a algun nodo padre 
-		elif nodo_a_verificar.pos_cb == nodo_padre.pos_cb and nodo_a_verificar.pos_cn == nodo_padre.pos_cn and nodo_a_verificar.manzanas_disponibles == nodo_padre.manzanas_disponibles and nodo_padre.user_items==nodo_a_verificar.user_items and nodo_padre.pc_items==nodo_a_verificar.pc_items:	
+		elif nodo_a_verificar.pos_cb == nodo_padre.pos_cb and nodo_a_verificar.pos_cn == nodo_padre.pos_cn and nodo_padre.user_items==nodo_a_verificar.user_items and nodo_padre.pc_items==nodo_a_verificar.pc_items:	
 			print "ya se ha expandido no expande"
 			#self.print_nodo(nodo_a_verificar)
 			#self.print_nodo(nodo_padre)
@@ -224,27 +224,27 @@ class Minimax:
 				print "utilidad",hoja.utilidad
 				print "utilidad",hoja.pos_cb
 				self.pos_cb = hoja.pos_cb
-				break
-				#return hoja.pos_cb
+				return hoja.pos_cb
 
 			if hoja.type == "Max":
-				#si caballo negro tiene mas utilidad que blanco entonces ponemos menor utilidad (Min)
+				#si min tiene mas utilidad que max entonces ponemos menor utilidad
 				if hoja.padre.utilidad >= hoja.utilidad:
 					hoja.padre.utilidad = hoja.utilidad
 					#si la profundidad del padre es cero actualizamos la posicion para saber donde mover
 					if hoja.padre.profundidad == 0:
-						hoja.padre.pos_cb = hoja.pos_cb
-			
+						hoja.padre.pos_cb = hoja.pos_cb			
 			else:
-				#si caballo blanco tiene menor utilidad que negro ponemos la de mayor utilidad (Max)
+				#si max tiene menor utilidad que min ponemos la de mayor utilidad
 				if hoja.padre.utilidad <= hoja.utilidad:
 					hoja.padre.utilidad = hoja.utilidad
 					#si la profundidad del padre es cero actualizamos la posicion para saber donde mover
 					if hoja.padre.profundidad == 0:
-						hoja.padre.pos_cb = hoja.pos_cb
+						hoja.padre.pos_cb = hoja.pos_cb			
+				
 						
 
-			#self.nodos_expandidos.remove(hoja)
+			
+
 		print datetime.now()-start
 
 
