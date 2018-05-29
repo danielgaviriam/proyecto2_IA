@@ -2,6 +2,7 @@ from Nodo import *
 import sys
 from math import *
 from copy import copy, deepcopy
+from datetime import datetime
 
 #Permita hacer un mayor numero de llamados recursivos
 
@@ -210,35 +211,41 @@ class Minimax:
 		return nodo
 
 	def actualizar_utilidades(self):
+		print "--------------actualizando utilidades-------------"
 		print "tamano a recorrer",len(self.nodos_expandidos)
+
+		start = datetime.now()
+		
+		
 		for hoja in reversed(self.nodos_expandidos):
 
-			#Evitar que se quede en una misma posicion, teniendo en cuenta nodos de profundidad menor a 5
-			"""
-			if hoja.utilidad==float("inf") or hoja.utilidad==(-1*float("inf")):
-				hoja.utilidad=0
-			"""
 			if isinstance(hoja.padre, int) is True:
 				print "llegue al raiz,no hay mas hojas"
 				print "utilidad",hoja.utilidad
 				print "utilidad",hoja.pos_cb
 				self.pos_cb = hoja.pos_cb
-				return hoja.pos_cb
+				break
+				#return hoja.pos_cb
 
 			if hoja.type == "Max":
+				#si caballo negro tiene mas utilidad que blanco entonces ponemos menor utilidad (Min)
 				if hoja.padre.utilidad >= hoja.utilidad:
 					hoja.padre.utilidad = hoja.utilidad
+					#si la profundidad del padre es cero actualizamos la posicion para saber donde mover
 					if hoja.padre.profundidad == 0:
 						hoja.padre.pos_cb = hoja.pos_cb
-						hoja.padre.utilidad = hoja.utilidad
+			
 			else:
+				#si caballo blanco tiene menor utilidad que negro ponemos la de mayor utilidad (Max)
 				if hoja.padre.utilidad <= hoja.utilidad:
 					hoja.padre.utilidad = hoja.utilidad
+					#si la profundidad del padre es cero actualizamos la posicion para saber donde mover
 					if hoja.padre.profundidad == 0:
 						hoja.padre.pos_cb = hoja.pos_cb
-						hoja.padre.utilidad = hoja.utilidad
+						
 
-			self.nodos_expandidos.remove(hoja)
+			#self.nodos_expandidos.remove(hoja)
+		print datetime.now()-start
 
 
 	def resumen_mini_max(self):
