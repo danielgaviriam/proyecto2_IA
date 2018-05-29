@@ -212,6 +212,12 @@ class Minimax2:
 	def actualizar_utilidades(self):
 		print "tamano a recorrer",len(self.nodos_expandidos)
 		for hoja in reversed(self.nodos_expandidos):
+
+			#Evaluando que todas las referencias a padres esten dentro de arreglo de nodos expandidos
+			if hoja.padre not in self.nodos_expandidos:
+				print "false"
+
+			#print "-----------",hoja.profundidad,"-",hoja.utilidad,"--------------------"
 			if isinstance(hoja.padre, int) is True:
 				print "llegue al raiz,no hay mas hojas"
 				print "utilidad",hoja.utilidad
@@ -220,15 +226,17 @@ class Minimax2:
 				return hoja.pos_cb
 
 			if hoja.type == "Max":
-				if hoja.padre.utilidad > hoja.utilidad:
+				if hoja.padre.utilidad >= hoja.utilidad:
 					hoja.padre.utilidad = hoja.utilidad
 					if hoja.padre.profundidad == 0:
 						hoja.padre.pos_cb = hoja.pos_cb
+						hoja.padre.utilidad = hoja.utilidad
 			else:
-				if hoja.padre.utilidad < hoja.utilidad:
+				if hoja.padre.utilidad <= hoja.utilidad:
 					hoja.padre.utilidad = hoja.utilidad
 					if hoja.padre.profundidad == 0:
 						hoja.padre.pos_cb = hoja.pos_cb
+						hoja.padre.utilidad = hoja.utilidad
 
 			self.nodos_expandidos.remove(hoja)
 

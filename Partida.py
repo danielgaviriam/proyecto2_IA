@@ -4,10 +4,12 @@ import pygame
 import time as t
 from pygame.locals import *
 from random import randint
+from Interfaz import *
 from Minimax import *
 from Minimax2 import *
 from Nodo import *
 from copy import copy, deepcopy
+
 
 
 class Partida:
@@ -33,6 +35,16 @@ class Partida:
 		self.b6=pygame.Rect(800,800,60,60)
 		self.b7=pygame.Rect(800,800,60,60)
 		self.b8=pygame.Rect(800,800,60,60)
+
+		self.b_reset = pygame.Rect(550,305,100,30)
+		font = pygame.font.SysFont("comicsansms", 25)
+		text_br=font.render("Salir", True, (0, 0, 0))
+		pygame.draw.rect(self.interfaz.ventana, [170, 170, 170], self.b_reset)
+		self.interfaz.ventana.blit(text_br,(580,310))
+		pygame.display.update()
+
+
+
 
 	def start(self):
 
@@ -88,10 +100,10 @@ class Partida:
 					if self.b7.collidepoint(mouse_pos):
 						self.moves([int(self.b7.x/60),int(self.b7.y/60)],1)
 					if self.b8.collidepoint(mouse_pos):
-						self.moves([int(self.b8.x/60),int(self.b8.y/60)],1)
-
-
-	
+						self.moves([int(self.b8.x/60),int(self.b8.y/60)],1)	
+					if self.b_reset.collidepoint(mouse_pos):
+						pygame.quit()
+						
 
 
 	#LA funcion misma_posicion y next, seran redefinidas en minimax, las de la clase partida seran unicamente

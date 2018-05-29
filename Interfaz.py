@@ -71,9 +71,8 @@ class Interfaz:
 
 		#Pinta el menu ppal
 		b_start = pygame.Rect(410,305,100,30)
-		b_reset = pygame.Rect(550,305,100,30)
 
-		self.menu_principal(b_start,b_reset)
+		self.menu_principal(b_start)
 
 
 		while True:
@@ -149,7 +148,7 @@ class Interfaz:
 		self.ventana.blit(self.caballon,( int(self.pos_cn[0])*60 , int(self.pos_cn[1])*60 ))
 
 	#Pinta los botones y la informacion del menu principal
-	def menu_principal(self,b_s,b_r):
+	def menu_principal(self,b_s):
 		#Cargar Imagenes
 		self.manzanam=pygame.image.load('pix/manzana_m.png')
 		self.caballobm=pygame.image.load('pix/blanco_m.png')
@@ -184,8 +183,5 @@ class Interfaz:
 		text_bs=font.render("Empezar", True, (0, 0, 0))
 		pygame.draw.rect(self.ventana, [170, 170, 170], b_s)
 		self.ventana.blit(text_bs,(422,310))
-		text_br=font.render("Reiniciar", True, (0, 0, 0))
-		pygame.draw.rect(self.ventana, [170, 170, 170], b_r)
-		self.ventana.blit(text_br,(562,310))
 		#-----------------------------------------------------
 		pygame.display.update()
