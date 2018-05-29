@@ -6,7 +6,6 @@ from pygame.locals import *
 from random import randint
 from Interfaz import *
 from Minimax import *
-from Minimax2 import *
 from Nodo import *
 from copy import copy, deepcopy
 
@@ -58,12 +57,13 @@ class Partida:
 				self.pintar_ganador()
 
 			#Eventos de tablero
+			#turno tablero
 			elif self.turno==True:	
 				pos=self.next(self.interfaz.pos_cn)
 				self.crear_botones_player(pos)
-
+			#turno pc
 			elif self.turno==False:
-				minimax = Minimax2(self.interfaz.pos_cn,self.interfaz.pos_cb,self.user_items,self.pc_items,self.interfaz.manzanas)
+				minimax = Minimax(self.interfaz.pos_cn,self.interfaz.pos_cb,self.user_items,self.pc_items,self.interfaz.manzanas)
 				
 				print "mipos",minimax.pos_cb
 				self.moves(minimax.pos_cb,False)
