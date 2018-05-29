@@ -70,8 +70,8 @@ class Interfaz:
 		self.pintar_escenario()
 
 		#Pinta el menu ppal
-		b_start = pygame.Rect(410,300,100,30)
-		b_reset = pygame.Rect(550,300,100,30)
+		b_start = pygame.Rect(410,305,100,30)
+		b_reset = pygame.Rect(550,305,100,30)
 
 		self.menu_principal(b_start,b_reset)
 
@@ -169,23 +169,23 @@ class Interfaz:
 		#Marcador-subtitulo
 		font = pygame.font.SysFont("comicsansms", 30)
 		resumen_title = font.render("Resumen", True, (107, 107, 107))
-		self.ventana.blit(resumen_title,(360,120))
+		self.ventana.blit(resumen_title,(360,122))
 		#Marcador-resumen
 		font = pygame.font.SysFont("comicsansms", 30)
 		#user=font.render("Usuario", True, (0, 0, 0))
 		#pc=font.render("PC", True, (0, 0, 0))
 		self.ventana.blit(self.caballonm,(390,150))
 		#ventana.blit(user,(420,155))
-		self.ventana.blit(self.caballobm,(390,190))
+		self.ventana.blit(self.caballobm,(390,230))
 		#ventana.blit(pc,(420,195))
 		#------------------------------------------------------
 		#Botones
 		font = pygame.font.SysFont("comicsansms", 25)
 		text_bs=font.render("Empezar", True, (0, 0, 0))
 		pygame.draw.rect(self.ventana, [170, 170, 170], b_s)
-		self.ventana.blit(text_bs,(422,305))
+		self.ventana.blit(text_bs,(422,310))
 		text_br=font.render("Reiniciar", True, (0, 0, 0))
 		pygame.draw.rect(self.ventana, [170, 170, 170], b_r)
-		self.ventana.blit(text_br,(562,305))
+		self.ventana.blit(text_br,(562,310))
 		#-----------------------------------------------------
 		pygame.display.update()

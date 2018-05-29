@@ -38,8 +38,11 @@ class Partida:
 
 		while True:
 			
+			#Evaluacion para no terminar con todos los items
+			#if self.interfaz.manzanas==[] or abs(len(self.user_items)-len(self.pc_items))>len(self.interfaz.manzanas):
 			#Evalua si el juego Termino
 			if self.interfaz.manzanas==[]:
+
 				self.pintar_ganador()
 
 			#Eventos de tablero
@@ -149,9 +152,9 @@ class Partida:
 		capa=pygame.image.load('pix/capa.jpg')
 		if self.turno==True:
 			self.interfaz.ventana.blit(turnero,( 370 , 155))
-			self.interfaz.ventana.blit(capa,( 370 , 195))
+			self.interfaz.ventana.blit(capa,( 370 , 235))
 		else:
-			self.interfaz.ventana.blit(turnero,(370 , 195))	
+			self.interfaz.ventana.blit(turnero,(370 , 235))	
 			self.interfaz.ventana.blit(capa,( 370 , 155))
 
 		pygame.display.update()
@@ -236,17 +239,32 @@ class Partida:
 	#de manzanas que tiene cada jugador
 	def update_marker(self):
 		manzana_m=pygame.image.load('pix/manzana_m.png')
-		x_n=450
+		x_n=420
 		y_n=150
-		x_b=450
-		y_b=190
+		x_b=420
+		y_b=230
 		
+		i=0
 		for pos in self.user_items:
-			self.interfaz.ventana.blit(manzana_m,( x_n , y_n))
+			if i<=7:
+				self.interfaz.ventana.blit(manzana_m,( x_n , y_n))
+				if i==7:
+					x_n=390
+			else:
+				self.interfaz.ventana.blit(manzana_m,( x_n , y_n+30))
+
+			i=i+1
 			x_n=x_n+30
 
+		i=0
 		for pos in self.pc_items:
-			self.interfaz.ventana.blit(manzana_m,( x_b , y_b))
+			if i<=7:
+				self.interfaz.ventana.blit(manzana_m,( x_b , y_b))
+				if i==7:
+					x_b=390
+			else:
+				self.interfaz.ventana.blit(manzana_m,( x_b , y_b+30))
+			i=i+1
 			x_b=x_b+30
 
 	#Funcion temporal, es para que la CPU escoja una opcion aleatoria entre sus opciones
@@ -263,11 +281,13 @@ class Partida:
 		font = pygame.font.SysFont("comicsansms", 30)
 		if len(self.user_items)>len(self.pc_items):
 			ganador = font.render("Gano Usuario", True, (107, 107, 107))
+			self.interfaz.ventana.blit(ganador,(460,105))
 
 		else:
 			ganador = font.render("Gano IA, Llorelo papa", True, (107, 107, 107))
+			self.interfaz.ventana.blit(ganador,(425,105))
 		
-		self.interfaz.ventana.blit(ganador,(470,250))
+		
 		pygame.display.update()
 
 
