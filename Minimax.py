@@ -55,6 +55,14 @@ class Minimax:
 			elif self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
 				
 				expandidos = self.expandir_nodo(self.lista_nodos[0])
+
+				if len(expandidos)==0:
+					if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
+						#No hay solucion-Empate
+						self.lista_nodos[0].utilidad=0
+					else:
+						self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
+
 				
 				for nodo in expandidos:
 					#agrega cada nodo hijo al final de la lista
@@ -218,6 +226,8 @@ class Minimax:
 		
 		
 		for hoja in reversed(self.nodos_expandidos):
+
+			print "------", hoja.profundidad,"-",hoja.utilidad,"------"
 
 			if isinstance(hoja.padre, int) is True:
 				print "llegue al raiz,no hay mas hojas"
