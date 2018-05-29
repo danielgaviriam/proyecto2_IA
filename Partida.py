@@ -64,8 +64,7 @@ class Partida:
 			#turno pc
 			elif self.turno==False:
 				minimax = Minimax(self.interfaz.pos_cn,self.interfaz.pos_cb,self.user_items,self.pc_items,self.interfaz.manzanas)
-				
-				print "mipos",minimax.pos_cb
+				#mover caballo blanco
 				self.moves(minimax.pos_cb,False)
 
 				#cambia turno
