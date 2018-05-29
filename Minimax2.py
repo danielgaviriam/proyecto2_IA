@@ -212,11 +212,11 @@ class Minimax2:
 	def actualizar_utilidades(self):
 		print "tamano a recorrer",len(self.nodos_expandidos)
 		for hoja in reversed(self.nodos_expandidos):
-
+			"""
 			#Evitar que se quede en una misma posicion, teniendo en cuenta nodos de profundidad menor a 5
 			if hoja.utilidad==float("inf") or hoja.utilidad==(-1*float("inf")):
 				hoja.utilidad=0
-				
+			"""
 			if isinstance(hoja.padre, int) is True:
 				print "llegue al raiz,no hay mas hojas"
 				print "utilidad",hoja.utilidad
