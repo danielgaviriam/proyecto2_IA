@@ -30,7 +30,8 @@ class Minimax:
 		self.calcular()
 
 
-	#funcionamiento similar al de amplitud
+	#funcionamiento similar al de amplitud eliminando nodos
+	"""
 	def calcular(self):
 		
 		i=0
@@ -84,7 +85,50 @@ class Minimax:
 		#self.salida()
 		print "termino-expandir"
 		self.actualizar_utilidades()
+	"""
+
+	#funcionamiento similar al de amplitud sin eliminar
+	def calcular(self):
 		
+		start2 = datetime.now()
+		i=0
+		while i < len(self.lista_nodos):
+			#si va a expandir un nodo de prof 5
+			if self.lista_nodos[i].profundidad==7:
+				#si ningun jugador a tomado manzanas
+				if len(self.lista_nodos[i].pc_items)==0 and len(self.lista_nodos[i].user_items)==0:
+					#No hay solucion-Empate
+					self.lista_nodos[i].utilidad=0
+				else:
+					self.lista_nodos[i].utilidad=len(self.lista_nodos[i].pc_items)-len(self.lista_nodos[i].user_items)
+
+				self.nodos_expandidos.append(self.lista_nodos[i])
+
+
+			#Evalua si es un ciclo, sino lo es, lo expande
+			elif self.nodo_fue_expandido(self.lista_nodos[i].padre,self.lista_nodos[i]) == False:
+				
+				expandidos = self.expandir_nodo(self.lista_nodos[i])
+
+				if len(expandidos)==0:
+					if len(self.lista_nodos[i].pc_items)==0 and len(self.lista_nodos[i].user_items)==0:
+						#No hay solucion-Empate
+						self.lista_nodos[i].utilidad=0
+					else:
+						self.lista_nodos[i].utilidad=len(self.lista_nodos[i].pc_items)-len(self.lista_nodos[i].user_items)
+
+				else:
+					for nodo in expandidos:
+						#agrega cada nodo hijo al final de la lista
+						self.lista_nodos.append(nodo)
+				
+				#sumarlo a la lista de expandidos
+				self.nodos_expandidos.append(self.lista_nodos[i])
+
+			i=i+1
+		
+		print "termino-expandir"
+		self.actualizar_utilidades()
 
 
 		#evita ciclos
