@@ -27,11 +27,11 @@ class Minimax:
 		nodo.pos_cn = pos_cn
 		self.lista_nodos.append(nodo)
 
-		self.calcular()
+		self.calcular2()
 
 
 	#funcionamiento similar al de amplitud eliminando nodos
-	"""
+	
 	def calcular(self):
 		
 		i=0
@@ -85,12 +85,11 @@ class Minimax:
 		#self.salida()
 		print "termino-expandir"
 		self.actualizar_utilidades()
-	"""
+	
 
 	#funcionamiento similar al de amplitud sin eliminar
-	def calcular(self):
+	def calcular2(self):
 		
-		start2 = datetime.now()
 		i=0
 		while i < len(self.lista_nodos):
 			#si va a expandir un nodo de prof 5
@@ -108,8 +107,10 @@ class Minimax:
 			#Evalua si es un ciclo, sino lo es, lo expande
 			elif self.nodo_fue_expandido(self.lista_nodos[i].padre,self.lista_nodos[i]) == False:
 				
+				
 				expandidos = self.expandir_nodo(self.lista_nodos[i])
 
+				#Evalua si es una hoja
 				if len(expandidos)==0:
 					if len(self.lista_nodos[i].pc_items)==0 and len(self.lista_nodos[i].user_items)==0:
 						#No hay solucion-Empate
@@ -130,16 +131,19 @@ class Minimax:
 		print "termino-expandir"
 		self.actualizar_utilidades()
 
-
-		#evita ciclos
+	#evita ciclos
 	def nodo_fue_expandido(self,nodo_padre,nodo_a_verificar):
 		#llego a la raiz
 		if isinstance(nodo_padre, int) is True:
 			print "expande es el nodo raiz"
 			return False
 		
+		if len(nodo_padre.user_items) < len(nodo_a_verificar.user_items) or len(nodo_padre.pc_items) < len(nodo_a_verificar.pc_items):
+			print "nueva verificacion"
+			return False
+
 		#si es igual a algun nodo padre 
-		elif nodo_a_verificar.pos_cb == nodo_padre.pos_cb and nodo_a_verificar.pos_cn == nodo_padre.pos_cn and nodo_padre.user_items==nodo_a_verificar.user_items and nodo_padre.pc_items==nodo_a_verificar.pc_items:	
+		elif nodo_a_verificar.pos_cb == nodo_padre.pos_cb and nodo_a_verificar.pos_cn == nodo_padre.pos_cn and sorted(nodo_padre.user_items)==sorted(nodo_a_verificar.user_items) and sorted(nodo_padre.pc_items)==sorted(nodo_a_verificar.pc_items):	
 			print "ya se ha expandido no expande"
 			#self.print_nodo(nodo_a_verificar)
 			#self.print_nodo(nodo_padre)
@@ -148,7 +152,6 @@ class Minimax:
 			print "ciclo"
 			return self.nodo_fue_expandido(nodo_padre.padre,nodo_a_verificar)
 
-	
 	def expandir_nodo(self,nodo):
 		nodos=[]
 		
@@ -271,7 +274,7 @@ class Minimax:
 		
 		for hoja in reversed(self.nodos_expandidos):
 
-			print "------", hoja.profundidad,"-",hoja.utilidad,"------"
+			#print "------", hoja.profundidad,"-",hoja.utilidad,"------"
 
 			if isinstance(hoja.padre, int) is True:
 				print "llegue al raiz,no hay mas hojas"
