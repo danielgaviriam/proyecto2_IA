@@ -4,8 +4,6 @@ from math import *
 from copy import copy, deepcopy
 from datetime import datetime
 
-#Permita hacer un mayor numero de llamados recursivos
-
 
 class Minimax:
 
@@ -27,7 +25,8 @@ class Minimax:
 		nodo.pos_cn = pos_cn
 		self.lista_nodos.append(nodo)
 
-		self.calcular2()
+		self.iniciar_super_matriz()
+		self.calcular()
 
 
 	#funcionamiento similar al de amplitud eliminando nodos
@@ -40,7 +39,7 @@ class Minimax:
 			if self.lista_nodos ==[]:
 				break				
 			#si va a expandir un nodo de prof 5
-			if self.lista_nodos[0].profundidad==6:
+			if self.lista_nodos[0].profundidad==7:
 				#si ningun jugador a tomado manzanas
 				if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
 					#No hay solucion-Empate
@@ -74,6 +73,8 @@ class Minimax:
 				self.lista_nodos.pop(0)
 			#si ya lo expandio lo borra
 			else:
+				self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
+				self.nodos_expandidos.append(self.lista_nodos[0])
 				self.lista_nodos.pop(0)
 
 			i=i+1
@@ -88,6 +89,7 @@ class Minimax:
 	
 
 	#funcionamiento similar al de amplitud sin eliminar
+	"""
 	def calcular2(self):
 		
 		i=0
@@ -130,9 +132,63 @@ class Minimax:
 		
 		print "termino-expandir"
 		self.actualizar_utilidades()
+	"""
+	def iniciar_super_matriz(self):
+		self.super_matriz = [[0]*5,[0]*5,[0]*5,[0]*5,[0]*5]
+		matriz_cn = [[0]*5,[0]*5,[0]*5,[0]*5,[0]*5]
+		
+
+		for i in range(5):
+			for j in range(5):
+				#items_pc y items_user
+				list_items = [[0]*33,[0]*33]
+
+				matriz_cn[i][j] = list_items
+
+
+		for i in range(5):
+			for j in range(5):
+				self.super_matriz[i][j] = deepcopy(matriz_cn)
+
+	def set_in_super_matriz(self,nodo):
+		
+
+		sub_matriz = self.super_matriz[nodo.pos_cb[0]-1][nodo.pos_cb[1]-1] 
+		
+		list_items = sub_matriz[nodo.pos_cn[0]-1][nodo.pos_cn[1]-1]
+
+		pc_items = list_items[0]
+		user_items = list_items[1] 
+		pc_items[len(nodo.pc_items)] = sorted(nodo.pc_items)
+		user_items[len(nodo.user_items)] = sorted(nodo.user_items)
+
+	def nodo_fue_expandido(self,nodo_padre,nodo_a_verificar):
+		sub_matriz = self.super_matriz[nodo_a_verificar.pos_cb[0]-1][nodo_a_verificar.pos_cb[1]-1] 
+		list_items = sub_matriz[nodo_a_verificar.pos_cn[0]-1][nodo_a_verificar.pos_cn[1]-1]
+
+		pc_items = list_items[0]
+		user_items = list_items[1] 
+
+		if (pc_items[len(nodo_a_verificar.pc_items)] == 0 or pc_items[len(nodo_a_verificar.pc_items)] == [] ) and (user_items[len(nodo_a_verificar.user_items)] == 0 or user_items[len(nodo_a_verificar.user_items)] == []):
+			print "expanda"
+			self.set_in_super_matriz(nodo_a_verificar)
+			return False
+		else:
+			if user_items[len(nodo_a_verificar.user_items)] == 0:
+				user_items[len(nodo_a_verificar.user_items)] = []
+
+			if pc_items[len(nodo_a_verificar.pc_items)] == 0:
+				pc_items[len(nodo_a_verificar.pc_items)] = []
+
+			if pc_items[len(nodo_a_verificar.pc_items)] == nodo_a_verificar.pc_items and user_items[len(nodo_a_verificar.user_items)] == nodo_a_verificar.user_items:
+				return True
+			else:
+				print "toca verificar bien si puede expandir"
+				return self.nodo_fue_expandido_original(nodo_padre,nodo_a_verificar)
+			#return False
 
 	#evita ciclos
-	def nodo_fue_expandido(self,nodo_padre,nodo_a_verificar):
+	def nodo_fue_expandido_original(self,nodo_padre,nodo_a_verificar):
 		#llego a la raiz
 		if isinstance(nodo_padre, int) is True:
 			print "expande es el nodo raiz"
@@ -150,7 +206,7 @@ class Minimax:
 			return True
 		else:
 			print "ciclo"
-			return self.nodo_fue_expandido(nodo_padre.padre,nodo_a_verificar)
+			return self.nodo_fue_expandido_original(nodo_padre.padre,nodo_a_verificar)
 
 	def expandir_nodo(self,nodo):
 		nodos=[]
@@ -250,18 +306,18 @@ class Minimax:
 			if copia_nodo_padre.type == "Max":
 				items_pc = copia_nodo_padre.pc_items
 				items_pc.append([x,y])
-				nodo.pc_items = items_pc
-				nodo.user_items = copia_nodo_padre.user_items
+				nodo.pc_items = sorted(items_pc)
+				nodo.user_items = sorted(copia_nodo_padre.user_items)
 			else:
 				items_user = copia_nodo_padre.user_items
 				items_user.append([x,y])
-				nodo.user_items = items_user
-				nodo.pc_items = copia_nodo_padre.pc_items
+				nodo.user_items = sorted(items_user)
+				nodo.pc_items = sorted(copia_nodo_padre.pc_items)
 					
 		else:
 			nodo.manzanas_disponibles = copia_nodo_padre.manzanas_disponibles
-			nodo.pc_items = copia_nodo_padre.pc_items
-			nodo.user_items = copia_nodo_padre.user_items
+			nodo.pc_items = sorted(copia_nodo_padre.pc_items)
+			nodo.user_items = sorted(copia_nodo_padre.user_items)
 
 		return nodo
 
