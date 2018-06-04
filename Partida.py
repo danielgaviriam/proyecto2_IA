@@ -20,12 +20,15 @@ class Partida:
 		self.user_items=[]
 		self.pc_items=[]
 
+		self.super_matriz = []
+
 		self.blanco=[]
 		self.negro=[]
 		#Variable global para manejar los turnos durante el juego
 		self.turno=False
 		#Funcion utilizada para pintar en la pantalla una flecha que indica quien esta jugando(a quien le toca)
 		self.actualizar_turno()
+		self.iniciar_super_matriz()
 
 		#Botones de movimiento para el usuario, estas se pintan en una posicion no visible inicialmente
 		#luego son movimos hacia las opciones de jugada del usuario en cada turno
@@ -46,10 +49,31 @@ class Partida:
 		pygame.display.update()
 
 
+	def iniciar_super_matriz(self):
+		self.super_matriz = [[0]*6,[0]*6,[0]*6,[0]*6,[0]*6,[0]*6]
+		matriz_cn = [[0]*6,[0]*6,[0]*6,[0]*6,[0]*6,[0]*6]
+		
 
+		for i in range(6):
+			for j in range(6):
+
+				utilidades = []
+				for x in range(34):
+					utilidades.append([0]*34)
+
+				#items_pc y items_user
+				list_items = [[0]*34,[0]*34,utilidades]
+
+				matriz_cn[i][j] = list_items
+
+
+		for i in range(6):
+			for j in range(6):
+				self.super_matriz[i][j] = deepcopy(matriz_cn)
 
 	def start(self):
 
+		
 		while True:
 			
 			#Evaluacion para no terminar con todos los items
@@ -66,7 +90,27 @@ class Partida:
 				self.crear_botones_player(pos)
 			#turno pc
 			elif self.turno==False:
-				minimax = Minimax(self.interfaz.pos_cn,self.interfaz.pos_cb,self.user_items,self.pc_items,self.interfaz.manzanas)
+				minimax = Minimax(self.interfaz.pos_cn,self.interfaz.pos_cb,self.user_items,self.pc_items,self.interfaz.manzanas,self.super_matriz)
+				
+				print "mi_pos",minimax.pos_cb
+
+				matriz_cn = [[0]*6,[0]*6,[0]*6,[0]*6,[0]*6,[0]*6]
+		
+
+				for i in range(6):
+					for j in range(6):
+
+						utilidades = []
+						for x in range(34):
+							utilidades.append([0]*34)
+
+						#items_pc y items_user
+						list_items = [[0]*34,[0]*34,utilidades]
+
+						matriz_cn[i][j] = list_items
+
+				self.super_matriz[minimax.pos_cb[0]][minimax.pos_cb[1]] = matriz_cn
+				
 				#mover caballo blanco
 				self.moves(minimax.pos_cb,False)
 

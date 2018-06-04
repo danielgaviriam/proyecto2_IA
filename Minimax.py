@@ -7,7 +7,7 @@ from datetime import datetime
 
 class Minimax:
 
-	def __init__(self,pos_cn,pos_cb,user_items,pc_items,manzanas_disponibles):
+	def __init__(self,pos_cn,pos_cb,user_items,pc_items,manzanas_disponibles,super_matriz):
 		self.lista_nodos = []
 		self.nodos_expandidos = []
 
@@ -23,9 +23,9 @@ class Minimax:
 		nodo.pc_items = pc_items
 		nodo.pos_cb = pos_cb
 		nodo.pos_cn = pos_cn
+		self.super_matriz = super_matriz
 		self.lista_nodos.append(nodo)
 
-		self.iniciar_super_matriz()
 		self.calcular()
 
 
@@ -38,6 +38,12 @@ class Minimax:
 			#Si va a expandir nodos de mayor profundidad
 			if self.lista_nodos ==[]:
 				break				
+
+			#Evalua si es un ciclo, sino lo es, lo expande
+			nodo_expandido = self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0])
+			print nodo_expandido
+
+
 			#si va a expandir un nodo de prof 5
 			if self.lista_nodos[0].profundidad==7:
 				#si ningun jugador a tomado manzanas
@@ -51,8 +57,8 @@ class Minimax:
 				self.lista_nodos.pop(0)
 
 
-			#Evalua si es un ciclo, sino lo es, lo expande
-			elif self.nodo_fue_expandido(self.lista_nodos[0].padre,self.lista_nodos[0]) == False:
+
+			elif  nodo_expandido[0] == False:
 				
 				expandidos = self.expandir_nodo(self.lista_nodos[0])
 
@@ -73,14 +79,14 @@ class Minimax:
 				self.lista_nodos.pop(0)
 			#si ya lo expandio lo borra
 			else:
+				#si tenemos la utilidad guardada previamente
+				if isinstance(nodo_expandido[1], int):
+					
+					self.lista_nodos[0].utilidad = nodo_expandido[1]
+					
+					self.nodos_expandidos.append(self.lista_nodos[0])
 				
-				if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
-					#No hay solucion-Empate
-					self.lista_nodos[0].utilidad=0
-				else:
-					self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
-				self.nodos_expandidos.append(self.lista_nodos[0])
-				
+
 				self.lista_nodos.pop(0)
 
 			i=i+1
@@ -95,22 +101,7 @@ class Minimax:
 	
 
 
-	def iniciar_super_matriz(self):
-		self.super_matriz = [[0]*6,[0]*6,[0]*6,[0]*6,[0]*6,[0]*6]
-		matriz_cn = [[0]*6,[0]*6,[0]*6,[0]*6,[0]*6,[0]*6]
-		
 
-		for i in range(6):
-			for j in range(6):
-				#items_pc y items_user
-				list_items = [[0]*33,[0]*33]
-
-				matriz_cn[i][j] = list_items
-
-
-		for i in range(6):
-			for j in range(6):
-				self.super_matriz[i][j] = deepcopy(matriz_cn)
 
 	def set_in_super_matriz(self,nodo):
 		
@@ -120,9 +111,11 @@ class Minimax:
 		list_items = sub_matriz[nodo.pos_cn[0]][nodo.pos_cn[1]]
 
 		pc_items = list_items[0]
-		user_items = list_items[1] 
+		user_items = list_items[1]
+		utilidades = list_items[2]
 		pc_items[len(nodo.pc_items)] = sorted(nodo.pc_items)
 		user_items[len(nodo.user_items)] = sorted(nodo.user_items)
+		utilidades[len(nodo.pc_items)][len(nodo.user_items)] = nodo.utilidad
 
 	def nodo_fue_expandido(self,nodo_padre,nodo_a_verificar):
 		
@@ -130,19 +123,19 @@ class Minimax:
 		list_items = sub_matriz[nodo_a_verificar.pos_cn[0]][nodo_a_verificar.pos_cn[1]]
 
 		pc_items = list_items[0]
-		user_items = list_items[1] 
+		user_items = list_items[1]
+		utilidad = list_items[2] 
 
 		if pc_items[len(nodo_a_verificar.pc_items)] == 0 and user_items[len(nodo_a_verificar.user_items)] == 0:
-			print "expanda"
-			self.set_in_super_matriz(nodo_a_verificar)
-			return False
+			return self.nodo_fue_expandido_original(nodo_padre,nodo_a_verificar)
+			
+			
 		else:
 			
-			#print pc_items[len(nodo_a_verificar.pc_items)]," == ",nodo_a_verificar.pc_items, "and",user_items[len(nodo_a_verificar.user_items)]," == ",nodo_a_verificar.user_items
-			#print pc_items[len(nodo_a_verificar.pc_items)] == nodo_a_verificar.pc_items, "and",user_items[len(nodo_a_verificar.user_items)] == nodo_a_verificar.user_items
-			
 			if pc_items[len(nodo_a_verificar.pc_items)] == nodo_a_verificar.pc_items and user_items[len(nodo_a_verificar.user_items)] == nodo_a_verificar.user_items:
-				return True
+				print "entro utilidad ya"
+				utilidad_almacenada = utilidad[len(nodo_a_verificar.pc_items)][len(nodo_a_verificar.user_items)]
+				return [True,utilidad_almacenada]
 			else:
 				print "toca verificar bien si puede expandir"
 				return self.nodo_fue_expandido_original(nodo_padre,nodo_a_verificar)
@@ -155,20 +148,20 @@ class Minimax:
 		#llego a la raiz
 		if isinstance(nodo_padre, int) is True:
 			print "expande es el nodo raiz"
-			self.set_in_super_matriz(nodo_a_verificar)
-			return False
+			#self.set_in_super_matriz(nodo_a_verificar)
+			return [False,"no"]
 		
 		if len(nodo_padre.user_items) < len(nodo_a_verificar.user_items) or len(nodo_padre.pc_items) < len(nodo_a_verificar.pc_items):
 			print "nueva verificacion"
-			self.set_in_super_matriz(nodo_a_verificar)
-			return False
+			#self.set_in_super_matriz(nodo_a_verificar)
+			return [False,"no"]
 
 		#si es igual a algun nodo padre 
 		elif nodo_a_verificar.pos_cb == nodo_padre.pos_cb and nodo_a_verificar.pos_cn == nodo_padre.pos_cn and sorted(nodo_padre.user_items)==sorted(nodo_a_verificar.user_items) and sorted(nodo_padre.pc_items)==sorted(nodo_a_verificar.pc_items):	
 			print "ya se ha expandido no expande"
 			#self.print_nodo(nodo_a_verificar)
 			#self.print_nodo(nodo_padre)
-			return True
+			return [True,"no"]
 		else:
 			print "ciclo"
 			return self.nodo_fue_expandido_original(nodo_padre.padre,nodo_a_verificar)
@@ -308,6 +301,7 @@ class Minimax:
 				#si min tiene mas utilidad que max entonces ponemos menor utilidad
 				if hoja.padre.utilidad >= hoja.utilidad:
 					hoja.padre.utilidad = hoja.utilidad
+					self.set_in_super_matriz(hoja.padre)
 					#si la profundidad del padre es cero actualizamos la posicion para saber donde mover
 					if hoja.padre.profundidad == 0:
 						hoja.padre.pos_cb = hoja.pos_cb			
@@ -315,6 +309,7 @@ class Minimax:
 				#si max tiene menor utilidad que min ponemos la de mayor utilidad
 				if hoja.padre.utilidad <= hoja.utilidad:
 					hoja.padre.utilidad = hoja.utilidad
+					self.set_in_super_matriz(hoja.padre)
 					#si la profundidad del padre es cero actualizamos la posicion para saber donde mover
 					if hoja.padre.profundidad == 0:
 						hoja.padre.pos_cb = hoja.pos_cb			
