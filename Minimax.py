@@ -73,7 +73,11 @@ class Minimax:
 				self.lista_nodos.pop(0)
 			#si ya lo expandio lo borra
 			else:
-				self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
+				if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
+					#No hay solucion-Empate
+					self.lista_nodos[0].utilidad=0
+				else:
+					self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
 				self.nodos_expandidos.append(self.lista_nodos[0])
 				self.lista_nodos.pop(0)
 
@@ -169,17 +173,11 @@ class Minimax:
 		pc_items = list_items[0]
 		user_items = list_items[1] 
 
-		if (pc_items[len(nodo_a_verificar.pc_items)] == 0 or pc_items[len(nodo_a_verificar.pc_items)] == [] ) and (user_items[len(nodo_a_verificar.user_items)] == 0 or user_items[len(nodo_a_verificar.user_items)] == []):
+		if pc_items[len(nodo_a_verificar.pc_items)] == 0 and user_items[len(nodo_a_verificar.user_items)] == 0:
 			print "expanda"
 			self.set_in_super_matriz(nodo_a_verificar)
 			return False
 		else:
-			if user_items[len(nodo_a_verificar.user_items)] == 0:
-				user_items[len(nodo_a_verificar.user_items)] = []
-
-			if pc_items[len(nodo_a_verificar.pc_items)] == 0:
-				pc_items[len(nodo_a_verificar.pc_items)] = []
-
 			if pc_items[len(nodo_a_verificar.pc_items)] == nodo_a_verificar.pc_items and user_items[len(nodo_a_verificar.user_items)] == nodo_a_verificar.user_items:
 				return True
 			else:
@@ -192,10 +190,12 @@ class Minimax:
 		#llego a la raiz
 		if isinstance(nodo_padre, int) is True:
 			print "expande es el nodo raiz"
+			self.set_in_super_matriz(nodo_a_verificar)
 			return False
 		
 		if len(nodo_padre.user_items) < len(nodo_a_verificar.user_items) or len(nodo_padre.pc_items) < len(nodo_a_verificar.pc_items):
 			print "nueva verificacion"
+			self.set_in_super_matriz(nodo_a_verificar)
 			return False
 
 		#si es igual a algun nodo padre 
