@@ -19,6 +19,9 @@ class Partida:
 		#Lista que tendra la cantidad de manzanas que tomen el usuario y el pc
 		self.user_items=[]
 		self.pc_items=[]
+
+		self.blanco=[]
+		self.negro=[]
 		#Variable global para manejar los turnos durante el juego
 		self.turno=False
 		#Funcion utilizada para pintar en la pantalla una flecha que indica quien esta jugando(a quien le toca)
@@ -67,8 +70,6 @@ class Partida:
 				#mover caballo blanco
 				self.moves(minimax.pos_cb,False)
 
-				#cambia turno
-				self.turno=True
 
 				#aleatorio
 				#pos=self.next(self.interfaz.pos_cb)
@@ -219,6 +220,12 @@ class Partida:
 	#Recibe como parametro una coordenada que sera aquella que escogio el usuario o el pc y una
 	#variable booleana que permite saber de quien es el movimiento (user=1)(pc=0)
 	def moves(self,coord,turn):
+
+		if turn == True:
+			self.negro.append(coord)
+		else:
+			self.blanco.append(coord)
+
 		#si tomo una manzana
 		if coord in self.interfaz.manzanas:
 			self.interfaz.manzanas.remove(coord)
@@ -298,7 +305,8 @@ class Partida:
 			ganador = font.render("Gano IA, Llorelo papa", True, (107, 107, 107))
 			self.interfaz.ventana.blit(ganador,(425,105))
 		
-		
+		print "mov caballo negro",self.negro
+		print "mov caballo blanco",self.blanco
 		pygame.display.update()
 
 

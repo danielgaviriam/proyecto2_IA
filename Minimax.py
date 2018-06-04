@@ -73,12 +73,14 @@ class Minimax:
 				self.lista_nodos.pop(0)
 			#si ya lo expandio lo borra
 			else:
+				
 				if len(self.lista_nodos[0].pc_items)==0 and len(self.lista_nodos[0].user_items)==0:
 					#No hay solucion-Empate
 					self.lista_nodos[0].utilidad=0
 				else:
 					self.lista_nodos[0].utilidad=len(self.lista_nodos[0].pc_items)-len(self.lista_nodos[0].user_items)
 				self.nodos_expandidos.append(self.lista_nodos[0])
+				
 				self.lista_nodos.pop(0)
 
 			i=i+1
@@ -92,74 +94,30 @@ class Minimax:
 		self.actualizar_utilidades()
 	
 
-	#funcionamiento similar al de amplitud sin eliminar
-	"""
-	def calcular2(self):
-		
-		i=0
-		while i < len(self.lista_nodos):
-			#si va a expandir un nodo de prof 5
-			if self.lista_nodos[i].profundidad==7:
-				#si ningun jugador a tomado manzanas
-				if len(self.lista_nodos[i].pc_items)==0 and len(self.lista_nodos[i].user_items)==0:
-					#No hay solucion-Empate
-					self.lista_nodos[i].utilidad=0
-				else:
-					self.lista_nodos[i].utilidad=len(self.lista_nodos[i].pc_items)-len(self.lista_nodos[i].user_items)
 
-				self.nodos_expandidos.append(self.lista_nodos[i])
-
-
-			#Evalua si es un ciclo, sino lo es, lo expande
-			elif self.nodo_fue_expandido(self.lista_nodos[i].padre,self.lista_nodos[i]) == False:
-				
-				
-				expandidos = self.expandir_nodo(self.lista_nodos[i])
-
-				#Evalua si es una hoja
-				if len(expandidos)==0:
-					if len(self.lista_nodos[i].pc_items)==0 and len(self.lista_nodos[i].user_items)==0:
-						#No hay solucion-Empate
-						self.lista_nodos[i].utilidad=0
-					else:
-						self.lista_nodos[i].utilidad=len(self.lista_nodos[i].pc_items)-len(self.lista_nodos[i].user_items)
-
-				else:
-					for nodo in expandidos:
-						#agrega cada nodo hijo al final de la lista
-						self.lista_nodos.append(nodo)
-				
-				#sumarlo a la lista de expandidos
-				self.nodos_expandidos.append(self.lista_nodos[i])
-
-			i=i+1
-		
-		print "termino-expandir"
-		self.actualizar_utilidades()
-	"""
 	def iniciar_super_matriz(self):
-		self.super_matriz = [[0]*5,[0]*5,[0]*5,[0]*5,[0]*5]
-		matriz_cn = [[0]*5,[0]*5,[0]*5,[0]*5,[0]*5]
+		self.super_matriz = [[0]*6,[0]*6,[0]*6,[0]*6,[0]*6,[0]*6]
+		matriz_cn = [[0]*6,[0]*6,[0]*6,[0]*6,[0]*6,[0]*6]
 		
 
-		for i in range(5):
-			for j in range(5):
+		for i in range(6):
+			for j in range(6):
 				#items_pc y items_user
 				list_items = [[0]*33,[0]*33]
 
 				matriz_cn[i][j] = list_items
 
 
-		for i in range(5):
-			for j in range(5):
+		for i in range(6):
+			for j in range(6):
 				self.super_matriz[i][j] = deepcopy(matriz_cn)
 
 	def set_in_super_matriz(self,nodo):
 		
 
-		sub_matriz = self.super_matriz[nodo.pos_cb[0]-1][nodo.pos_cb[1]-1] 
+		sub_matriz = self.super_matriz[nodo.pos_cb[0]][nodo.pos_cb[1]] 
 		
-		list_items = sub_matriz[nodo.pos_cn[0]-1][nodo.pos_cn[1]-1]
+		list_items = sub_matriz[nodo.pos_cn[0]][nodo.pos_cn[1]]
 
 		pc_items = list_items[0]
 		user_items = list_items[1] 
@@ -167,8 +125,9 @@ class Minimax:
 		user_items[len(nodo.user_items)] = sorted(nodo.user_items)
 
 	def nodo_fue_expandido(self,nodo_padre,nodo_a_verificar):
-		sub_matriz = self.super_matriz[nodo_a_verificar.pos_cb[0]-1][nodo_a_verificar.pos_cb[1]-1] 
-		list_items = sub_matriz[nodo_a_verificar.pos_cn[0]-1][nodo_a_verificar.pos_cn[1]-1]
+		
+		sub_matriz = self.super_matriz[nodo_a_verificar.pos_cb[0]][nodo_a_verificar.pos_cb[1]] 
+		list_items = sub_matriz[nodo_a_verificar.pos_cn[0]][nodo_a_verificar.pos_cn[1]]
 
 		pc_items = list_items[0]
 		user_items = list_items[1] 
@@ -178,11 +137,17 @@ class Minimax:
 			self.set_in_super_matriz(nodo_a_verificar)
 			return False
 		else:
+			
+			#print pc_items[len(nodo_a_verificar.pc_items)]," == ",nodo_a_verificar.pc_items, "and",user_items[len(nodo_a_verificar.user_items)]," == ",nodo_a_verificar.user_items
+			#print pc_items[len(nodo_a_verificar.pc_items)] == nodo_a_verificar.pc_items, "and",user_items[len(nodo_a_verificar.user_items)] == nodo_a_verificar.user_items
+			
 			if pc_items[len(nodo_a_verificar.pc_items)] == nodo_a_verificar.pc_items and user_items[len(nodo_a_verificar.user_items)] == nodo_a_verificar.user_items:
 				return True
 			else:
 				print "toca verificar bien si puede expandir"
 				return self.nodo_fue_expandido_original(nodo_padre,nodo_a_verificar)
+			
+			#return self.nodo_fue_expandido_original(nodo_padre,nodo_a_verificar)
 			#return False
 
 	#evita ciclos
