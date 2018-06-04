@@ -119,12 +119,12 @@ class Interfaz:
 		
 		
 		self.manzanas.append([2,5])
-		self.manzanas.append([0,0])
-		self.manzanas.append([2,0])
+		self.manzanas.append([5,3])
+		self.manzanas.append([1,0])
 		self.manzanas.append([0,5])
-		self.manzanas.append([1,5])
+		self.manzanas.append([3,5])
 
-		self.pos_cb = [3,2]
+		self.pos_cb = [4,2]
 		self.pos_cn = [5,0]
 		
 

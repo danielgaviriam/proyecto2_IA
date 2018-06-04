@@ -269,6 +269,8 @@ class Partida:
 			self.negro.append(coord)
 		else:
 			self.blanco.append(coord)
+		
+		print coord,self.interfaz.manzanas
 
 		#si tomo una manzana
 		if coord in self.interfaz.manzanas:
