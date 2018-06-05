@@ -136,6 +136,7 @@ class Minimax:
 				print "entro utilidad ya"
 				utilidad_almacenada = utilidad[len(nodo_a_verificar.pc_items)][len(nodo_a_verificar.user_items)]
 				return [True,utilidad_almacenada]
+				
 			else:
 				print "toca verificar bien si puede expandir"
 				return self.nodo_fue_expandido_original(nodo_padre,nodo_a_verificar)
