@@ -95,7 +95,7 @@ class Interfaz:
 
 
 	#Construye el array con las posiciones de las manzanas y asigna valos a las posiciones de los caballos (Aleatoriamente)
-	def coordenadas_aleatorias_original(self,cant_items):
+	def coordenadas_aleatorias(self,cant_items):
 
 		while len(self.manzanas)<int(cant_items):
 			x=randint(0, 5)
@@ -114,20 +114,7 @@ class Interfaz:
 
 		copy_manzanas=self.manzanas
 
-	def coordenadas_aleatorias(self,cant_items):
-		
-				
-		self.manzanas.append([2,5])
-		self.manzanas.append([5,3])
-		self.manzanas.append([1,0])
-		self.manzanas.append([0,5])
-		self.manzanas.append([3,5])
 
-		self.pos_cb = [4,2]
-		self.pos_cn = [5,0]
-
-		self.pos_cb = [3,2]
-		self.pos_cn = [5,0]
 
 	#Pintar el escenario, teniento en cuenta la cantidad de manzanas que hayan sin coger
 	#y las posiciones de los caballos
